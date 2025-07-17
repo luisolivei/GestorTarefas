@@ -5,6 +5,7 @@ const cors = require('cors');
 const path = require('path');
 const connectDB = require('./config/db'); // <-- Importar a função de conexão com o banco de dados
 
+
 const authRoutes = require('./routes/authRoutes'); // Rotas de autenticação
 
 const app = express();
@@ -17,7 +18,7 @@ app.use(
 	}),
 );
 // Coneção com a base de dados
-connectDB();
+// connectDB();
 
 // Middleware
 app.use(express.json());
