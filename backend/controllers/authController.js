@@ -20,7 +20,7 @@ const registerUser = async (req, res) => {
 		if (userExists) {
 			return res.status(400).json({ message: 'User already exists' });
 		}
-		//Determinar o papel do usuário com base no token de convite do admin 
+		//Determinar o papel do usuário com base no token de convite do admin
 		let role = 'member'; // Padrão principal é membro
 		if (adminInviteToken && adminInviteToken === process.env.ADMIN_INVITE_TOKEN) {
 			role = 'admin'; // Se o token de convite do admin for fornecido e for valido, o papel do usuário será admin
@@ -58,6 +58,26 @@ const registerUser = async (req, res) => {
 // @access Public
 const loginUser = async (req, res) => {
 	try {
+		const { email, password } = req.body;
+
+		const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+		}
+
+		const isMatch = await bcrypt.compare(password, user.password);
+		if (!isMatch) {
+			return res.status(401).json({ message: 'Invalid credentials' });
+		}
+
+		res.json({
+			_id: user._id,
+			name: user.name,
+			email: user.email,
+			role: user.role,
+			profileImageUrl: user.profileImageUrl,
+			token: generateToken(user._id),
+		});
 	} catch (error) {
 		res.status(500).json({ message: 'Server error', error: error.message });
 	}
@@ -84,4 +104,3 @@ const updateUserProfile = async (req, res) => {
 };
 
 module.exports = { registerUser, loginUser, getUserProfile, updateUserProfile };
-
