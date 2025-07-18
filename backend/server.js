@@ -18,7 +18,7 @@ app.use(
 	}),
 );
 // Coneção com a base de dados
-// connectDB();
+connectDB();
 
 // Middleware
 app.use(express.json());
