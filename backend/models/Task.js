@@ -4,7 +4,7 @@ const todoSchema = new mongoose.Schema({
 	task: { type: String, required: true },
 	completed: { type: Boolean, default: false },
 });
-// Define the Task schema
+// Defenir o esquema da tarefa
 const taskSchema = new mongoose.Schema(
 	{
 		title: { type: String, required: true },
@@ -20,5 +20,5 @@ const taskSchema = new mongoose.Schema(
 	},
 	{ timestamps: true },
 );
-// Create the User model
+// Criar o modelo da tarefa
 module.exports = mongoose.model('Task', taskSchema);
