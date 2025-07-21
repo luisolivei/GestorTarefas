@@ -14,6 +14,7 @@ const generateToken = userId => {
 // @access Public
 const registerUser = async (req, res) => {
 	try {
+		console.log('Dados recebidos:', req.body);
 		const { name, email, password, profileImageUrl, adminInviteToken } = req.body;
 		// Ver se já existe o usuário com o email fornecido
 		const userExists = await User.findOne({ email });

@@ -5,6 +5,7 @@ const cors = require('cors');
 const path = require('path');
 const mongoSanitize = require('express-mongo-sanitize'); // <-- Importar o middleware de sanitização
 const connectDB = require('./config/db'); // <-- Importar a função de conexão com o banco de dados
+const xss = require('xss-clean'); // <-- Importar o middleware de limpeza XSS
 
 
 const authRoutes = require('./routes/authRoutes'); // Rotas de autenticação
@@ -25,6 +26,19 @@ connectDB();
 
 // Middleware
 app.use(express.json());
+
+// Middleware XSS ajustado para não causar erro
+function xssCleanBodyParams(req, res, next) {
+  try {
+    if (req.body) req.body = xss(req.body);
+    if (req.params) req.params = xss(req.params);
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
+app.use(xssCleanBodyParams);
 
 // Middleware de sanitização para evitar injeção de código No-SQL
 app.use((req, res, next) => {
