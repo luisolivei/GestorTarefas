@@ -3,12 +3,14 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const mongoSanitize = require('express-mongo-sanitize'); // <-- Importar o middleware de sanitização
 const connectDB = require('./config/db'); // <-- Importar a função de conexão com o banco de dados
 
 
 const authRoutes = require('./routes/authRoutes'); // Rotas de autenticação
 
 const app = express();
+
 // Configuração do CORS
 app.use(
 	cors({
@@ -17,11 +19,20 @@ app.use(
 		allowedHeaders: ['Content-Type', 'Authorization'],
 	}),
 );
+
 // Coneção com a base de dados
 connectDB();
 
 // Middleware
 app.use(express.json());
+
+// Middleware de sanitização para evitar injeção de código No-SQL
+app.use((req, res, next) => {
+	if (req.body) {
+		req.body = mongoSanitize.sanitize(req.body);
+	}
+	next();
+});
 
 // Rotas
 app.use('/api/auth', authRoutes);
