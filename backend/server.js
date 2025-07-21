@@ -6,6 +6,7 @@ const path = require('path');
 const mongoSanitize = require('express-mongo-sanitize'); // <-- Importar o middleware de sanitização
 const connectDB = require('./config/db'); // <-- Importar a função de conexão com o banco de dados
 const xss = require('xss-clean'); // <-- Importar o middleware de limpeza XSS
+const helmet = require('helmet'); // <-- Importar o middleware Helmet para segurança
 
 
 const authRoutes = require('./routes/authRoutes'); // Rotas de autenticação
@@ -47,6 +48,9 @@ app.use((req, res, next) => {
 	}
 	next();
 });
+
+// Middleware Helmet para definir cabeçalhos HTTP seguros
+app.use(helmet());
 
 // Rotas
 app.use('/api/auth', authRoutes);
