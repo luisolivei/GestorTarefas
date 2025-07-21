@@ -4,18 +4,17 @@ const User = require('../models/User');
 // Middleware para proteger rotas
 const protect = async (req, res, next) => {
 	try {
-		let token = req.headers.authorization;
+		const token = req.cookies.token; // ler token do cookie
 
-		if (token && token.startsWith('Bearer ')) {
-			token = token.split(' ')[1]; //Extrair o token do header
-			const decoded = jwt.verify(token, process.env.JWT_SECRET); //Verifica o token
-			req.user = await User.findById(decoded.id).select('-password'); // Procura o usuario e exclui a senha
-			next(); // Vai para o próximo middleware ou rota
-		} else {
-			res.status(401).json({ message: 'Not authorized, no token' }); //Se o token nao for fornecido, retorna um erro
+		if (!token) {
+			return res.status(401).json({ message: 'Not authorized, no token' });
 		}
+
+		const decoded = jwt.verify(token, process.env.JWT_SECRET);
+		req.user = await User.findById(decoded.id).select('-password');
+		next();
 	} catch (error) {
-		res.status(401).json({ message: 'Not authorized, token failed' }); //Se a verificação do token falhar, retorna um erro.
+		res.status(401).json({ message: 'Not authorized, token failed' });
 	}
 };
 

@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 //Gerar token JWT para autenticação
 const generateToken = userId => {
 	return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
-		expiresIn: '7d',
+		expiresIn: process.env.JWT_EXPIRES_IN || '1h',
 	});
 };
 
@@ -14,7 +14,6 @@ const generateToken = userId => {
 // @access Public
 const registerUser = async (req, res) => {
 	try {
-		console.log('Dados recebidos:', req.body);
 		const { name, email, password, profileImageUrl, adminInviteToken } = req.body;
 		// Ver se já existe o usuário com o email fornecido
 		const userExists = await User.findOne({ email });
@@ -70,6 +69,14 @@ const loginUser = async (req, res) => {
 		if (!isMatch) {
 			return res.status(401).json({ message: 'Invalid credentials' });
 		}
+		const token = generateToken(user._id);
+
+		res.cookie('token', token, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === 'production', // Define secure flag em produção
+			sameSite: 'Strict', // Define SameSite para evitar CSRF
+			maxAge: 3600000, // 1 hora
+		});
 
 		res.json({
 			_id: user._id,
@@ -77,7 +84,7 @@ const loginUser = async (req, res) => {
 			email: user.email,
 			role: user.role,
 			profileImageUrl: user.profileImageUrl,
-			token: generateToken(user._id),
+			
 		});
 	} catch (error) {
 		res.status(500).json({ message: 'Server error', error: error.message });
