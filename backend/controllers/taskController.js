@@ -3,32 +3,9 @@ const Task = require('../models/Task');
 // @desc    Get all tasks (Admin: all, User: only assigned tasks)
 // @route   GET /api/tasks
 // @access  Private
-const createTasks = async (req, res) => {
+const getTasks = async (req, res) => {
     try {
-			const { title, description, priority, dueDate, assignedTo, attachments, todoChecklist } = req.body;
-
-			// Validações básicas
-			if (!title || typeof title !== 'string') {
-				return res.status(400).json({ message: 'O campo "title" é obrigatório e deve ser uma string.' });
-			}
-
-			if (!assignedTo || !Array.isArray(assignedTo) || assignedTo.length === 0) {
-				return res.status(400).json({ message: 'assignedTo deve ser um array com pelo menos um ID de utilizador.' });
-			}
-
-			const task = await Task.create({
-				title,
-				description,
-				priority,
-				dueDate: dueDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Default to one week from now
-				assignedTo,
-				createdBy: req.user._id, // Assuming req.user is populated with the authenticated user
-				todoChecklist,
-				attachments,
-			});
-
-			res.status(201).json({ message: 'Task created', task });
-		} catch (error) {
+    } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
@@ -38,9 +15,9 @@ const createTasks = async (req, res) => {
 // @access  Private
 const getTaskById = async (req, res) => {
     try {
-		} catch (error) {
-			res.status(500).json({ message: 'Server error', error: error.message });
-		}
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
 };
 
 // @desc    Create a new task (Admin only)
@@ -48,9 +25,32 @@ const getTaskById = async (req, res) => {
 // @access  Private(Admin)
 const createTask = async (req, res) => {
     try {
-		} catch (error) {
+        const { title, description, priority, dueDate, assignedTo, attachments, todoChecklist } = req.body;
+        
+        // Validações básicas
+        if (!title || typeof title !== 'string') {
+            return res.status(400).json({ message: 'O campo "title" é obrigatório e deve ser uma string.' });
+        }
+        
+        if (!assignedTo || !Array.isArray(assignedTo) || assignedTo.length === 0) {
+            return res.status(400).json({ message: 'assignedTo deve ser um array com pelo menos um ID de utilizador.' });
+        }
+        
+        const task = await Task.create({
+            title,
+            description,
+            priority,
+            dueDate: dueDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Default to one week from now
+            assignedTo,
+            createdBy: req.user._id, // Assuming req.user is populated with the authenticated user
+            todoChecklist,
+            attachments,
+        });
+        
+        res.status(201).json({ message: 'Task created', task });
+    } catch (error) {
 			res.status(500).json({ message: 'Server error', error: error.message });
-		}
+	}
 };
 
 // @desc    Update task details
@@ -114,7 +114,7 @@ const getUserDashboardData = async (req, res) => {
 };
 
 module.exports = {
-    createTasks,
+    getTasks,
     getTaskById,
     createTask,
     updateTask,

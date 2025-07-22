@@ -12,6 +12,7 @@ const helmet = require('helmet'); // <-- Importar o middleware Helmet para segur
 
 const authRoutes = require('./routes/authRoutes'); // Rotas de autenticação
 const userRoutes = require('./routes/userRoutes'); // Rotas de tarefas
+const taskRoutes = require('./routes/taskRoutes'); // Rotas de tarefas
 
 const app = express();
 
@@ -46,7 +47,8 @@ app.use(helmet());
 
 // Rotas
 app.use('/api/auth', authRoutes);
-app.use("/api/users", userRoutes)
+app.use("/api/users", userRoutes);
+app.use("/api/tasks", taskRoutes);
 // app.use("/api/users", userRoutes)
 // app.use("/api/reports", reportRoutes)
 
