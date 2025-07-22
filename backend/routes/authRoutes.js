@@ -1,6 +1,6 @@
 const express = require('express');
 const {body, validationResult} = require('express-validator'); 
-const { registerUser, loginUser, getUserProfile, updateUserProfile } = require('../controllers/authController');
+const { registerUser, loginUser, getUserProfile, updateUserProfile, logoutUser } = require('../controllers/authController');
 const { protect } = require('../middlewares/authMiddleware');
 const upload = require('../middlewares/uploadMiddleware');
 
@@ -33,6 +33,7 @@ router.post('/register', validateRegister, checkValidationErrors, registerUser);
 router.post('/login', validateLogin, checkValidationErrors, loginUser); // Login do usuário
 router.get('/profile', protect, getUserProfile); // Buscar perfil do usuário
 router.put('/profile', protect, updateUserProfile); // Update do perfil do usuário
+router.post('/logout', protect, logoutUser); // Logout do usuario
 
 router.post('/upload-image', upload.single('image'), (req, res) => {
 	if (!req.file) {

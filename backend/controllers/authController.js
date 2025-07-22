@@ -140,4 +140,18 @@ const updateUserProfile = async (req, res) => {
 	}
 };
 
-module.exports = { registerUser, loginUser, getUserProfile, updateUserProfile };
+// @desc Logout prefil do usuário
+// @route PUT /api/auth/logout
+// @access Private(Requires JWT)
+const logoutUser = (req, res) => {
+	res.cookie('token', '', {
+		httpOnly: true,
+		expires: new Date(0), // Expira imediatamente
+		sameSite: 'Strict',
+		secure: process.env.NODE_ENV === 'production',
+	});
+	res.status(200).json({ message: 'Logout' });
+};
+
+
+module.exports = { registerUser, loginUser, getUserProfile, updateUserProfile, logoutUser };
