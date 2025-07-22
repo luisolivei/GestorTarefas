@@ -32,7 +32,10 @@ const getUsers = async (req, res) => {
 // @route   GET /api/users/:id
 // @access  Private(Admin)
 const getUserById = async (req, res) => {
-	try {
+    try {
+        const user = await User.findById(req.params.id).select('-password'); // Exclude password field
+        if (!user) return res.status(404).json({ message: 'User not found' });
+        res.json(user);
 	} catch (error) {
 		res.status(500).json({ message: 'Server error' });
 	}
@@ -43,7 +46,11 @@ const getUserById = async (req, res) => {
 // @access Private(Admin)
 const deleteUser = async (req, res) => {
 	try {
+		const deletedUser = await User.findByIdAndDelete(req.params.id);
+		if (!deletedUser) return res.status(404).json({ message: 'User not found' });
+		res.json({ message: 'User removed' });
 	} catch (error) {
+		console.error(error);
 		res.status(500).json({ message: 'Server error' });
 	}
 };
