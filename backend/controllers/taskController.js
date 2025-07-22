@@ -156,6 +156,28 @@ const deleteTask = async (req, res) => {
 // @access  Private
 const updateTaskStatus = async (req, res) => {
 	try {
+        const task = await Task.findById(req.params.id);
+        if (!task) return res.status(404).json({ message: 'Task not found' });
+        
+        const isAssigned = task.assignedTo.some(
+            (user_id) => user_id.toString() === req.user._id.toString()
+        );
+        
+        if (!isAssigned && req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Not authorized' });
+        }
+        
+        task.status = req.body.status || task.status;
+        
+        if(task.status === 'Completed') {
+            task.todoChecklist.forEach((item) => {
+                item.completed = true;
+            });
+            task.progress = 100; // Set progress to 100% if task is completed
+        }
+        
+        await task.save();
+        res.json({ message: 'Task status updated', task });
 	} catch (error) {
 		res.status(500).json({ message: 'Server error', error: error.message });
 	}
@@ -165,7 +187,8 @@ const updateTaskStatus = async (req, res) => {
 // @route   PUT /api/tasks/:id/todo
 // @access  Private
 const updateTaskChecklist = async (req, res) => {
-	try {
+    try {
+
 	} catch (error) {
 		res.status(500).json({ message: 'Server error', error: error.message });
 	}
