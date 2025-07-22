@@ -141,8 +141,8 @@ const updateUserProfile = async (req, res) => {
 };
 
 // @desc Logout prefil do usuário
-// @route PUT /api/auth/logout
-// @access Private(Requires JWT)
+// @route post /api/auth/logout
+
 const logoutUser = (req, res) => {
 	res.cookie('token', '', {
 		httpOnly: true,
