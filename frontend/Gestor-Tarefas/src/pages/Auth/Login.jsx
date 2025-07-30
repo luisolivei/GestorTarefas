@@ -40,14 +40,14 @@ const Login = () => {
 	return <AuthLayout>
 		<div className='w-full max-w-md mx-auto bg-white/60 p-6 rounded-lg shadow-md'>
 			<h3 className='text-center text-xl font-semibold text-slate-800'>Bem-vindo</h3>
-			<p className='text-s text-slate-700 mt-[5px] mb-[10px]'>Insere os dados para efetuar o login</p>
+			<p className='text-s text-slate-700 mt-[5px]  mb-[10px]'>Insere os dados para efetuar o login</p>
 
 			<form onSubmit={handleLogin}>
 				{/* Campo de email */}
 				<Input value={email} onChange={({ target }) => setEmail(target.value)} label='Email' placeholder='john@example.com' type='text' />
 
 				{/* Campo de password */}
-				<Input value={password} onChange={({ target }) => setPassword(target.value)} label='Password' placeholder='Mínimo 6 caracteres' type='password' />
+				<Input value={password} onChange={({ target }) => setPassword(target.value)} label='Palavra-passe' placeholder='Mínimo 6 caracteres' type='password' />
 
 				{/* Mensagem de erro, se existir */}
 				{error && <p className='text-red-500 text-sm pb-2.5'>{error}</p>}

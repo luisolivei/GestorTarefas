@@ -17,21 +17,21 @@ const SignUp = () => {
 	const handleSignUp = async e => {
 		e.preventDefault(); // Evita o comportamento padrão de recarregar a página ao submeter o formulário
 
-		// Valida o email; se for inválido, define a mensagem de erro
+		// Valida o nome completo; se estiver vazio, define a mensagem de erro
 		if (!fullName) {
 			setError('Por favor, insira o seu nome.');
 			return;
 		}
 
-		// Verifica se a password foi inserida
+		// Valida o email; se for inválido, define a mensagem de erro
 		if (!validateEmail(email)) {
 			setError('Por favor, insira o seu email.');
 			return;
 		}
 
-		// Verifica se a password foi inserida
+		// Verifica se a palavra-passe foi inserida
 		if (!password) {
-			setError('Por favor, insira uma senha.');
+			setError('Por favor, insira a sua palavra-passe.');
 			return;
 		}
 
@@ -50,15 +50,17 @@ const SignUp = () => {
 
 					<div>
 						<Input value={fullName} onChange={({ target }) => setFullName(target.value)} label='Nome completo' placeholder='Insira o seu nome completo' type='text' />
+
 						{/* Campo de email */}
 						<Input value={email} onChange={({ target }) => setEmail(target.value)} label='Email' placeholder='john@example.com' type='text' />
 
-						{/* Campo de password */}
-						<Input value={password} onChange={({ target }) => setPassword(target.value)} label='Password' placeholder='Mínimo 6 caracteres' type='password' />
+						{/* Campo da palavra-passe */}
+						<Input value={password} onChange={({ target }) => setPassword(target.value)} label='Palavra-passe' placeholder='Mínimo 6 caracteres' type='password' />
 
-						{/* Campo de admin invite token */}
-						<Input value={adminInviteToken} onChange={({ target }) => setAdminInviteToken(target.value)} label='Admin Invite Token' placeholder='Digite' type='text' />
+						{/* Campo do token de convite de administrador */}
+						<Input value={adminInviteToken} onChange={({ target }) => setAdminInviteToken(target.value)} label='Token de Convite de Administrador' placeholder='Digite' type='text' />
 					</div>
+
 					{/* Mensagem de erro */}
 					{error && <p className='text-red-500 text-sm mt-2'>{error}</p>}
 
@@ -67,9 +69,9 @@ const SignUp = () => {
 						Registar
 					</button>
 
-					{/* Link para a página de registo */}
+					{/* Link para a página de login */}
 					<p className='text-[13px] text-slate-800 mt-3'>
-						Já tem uma conta?{''}
+						Já tem uma conta?{' '}
 						<Link className='font-semibold text-[13px] text-primary underline' to='/login'>
 							Login
 						</Link>
