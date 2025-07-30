@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Input from '../../components/Inputs/Input';
 import { validateEmail } from '../../utils/helper';
+import AuthLayout from '../../components/layouts/AuthLayout';
 
 const Login = () => {
 	// Estado para armazenar o email inserido pelo utilizador
@@ -36,9 +37,9 @@ const Login = () => {
 		// Aqui podes adicionar a lógica para autenticar o utilizador (ex: chamada à API)
 	};
 
-	return (
-		<div className='w-full h-3/4 md:h-full flex flex-col justify-center items-center bg-white rounded-lg shadow-lg p-8'>
-			<h3 className='text-xl font-semibold text-black'>Bem-vindo</h3>
+	return <AuthLayout>
+		<div className='w-full max-w-md mx-auto bg-white/60 p-6 rounded-lg shadow-md'>
+			<h3 className='text-center text-xl font-semibold text-slate-800'>Bem-vindo</h3>
 			<p className='text-s text-slate-700 mt-[5px] mb-[10px]'>Insere os dados para efetuar o login</p>
 
 			<form onSubmit={handleLogin}>
@@ -59,13 +60,13 @@ const Login = () => {
 				{/* Link para a página de registo */}
 				<p className='text-[13px] text-slate-800 mt-3'>
 					Não tens conta?{' '}
-					<Link className='font-medium text-primary underline' to='/signup'>
+					<Link className='font-semibold text-[13px] text-primary underline' to='/signup'>
 						Regista-te
 					</Link>
 				</p>
 			</form>
 		</div>
-	);
-};
+	</AuthLayout>;
+}; 
 
 export default Login;

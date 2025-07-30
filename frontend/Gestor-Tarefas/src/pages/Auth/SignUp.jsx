@@ -1,11 +1,11 @@
-
+import AuthLayout from "../../components/layouts/AuthLayout"
 
 const SignUp = () => {
-  return (
+  return <AuthLayout>
     <div>
       signup
     </div>
-  )
+  </AuthLayout>
 }
 
 export default SignUp
