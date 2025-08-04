@@ -20,7 +20,8 @@ const app = express();
 // Configuração do CORS
 app.use(
 	cors({
-		origin: process.env.CLIENT_URL || '*',
+		origin: process.env.CLIENT_URL || 'http://localhost:5173', // frontend
+		credentials: true, // <-- Permitir cookies
 		methods: ['GET', 'POST', 'PUT', 'DELETE'],
 		allowedHeaders: ['Content-Type', 'Authorization'],
 	}),

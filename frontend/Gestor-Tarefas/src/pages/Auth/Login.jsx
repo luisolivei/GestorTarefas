@@ -20,45 +20,35 @@ const Login = () => {
 
 	// Função para lidar com o envio do formulário de login
 	const handleLogin = async e => {
-		e.preventDefault(); // Evita o comportamento padrão de recarregar a página ao submeter o formulário
+		e.preventDefault();
 
-		// Valida o email; se for inválido, define a mensagem de erro
 		if (!validateEmail(email)) {
 			setError('Por favor, insira um email válido.');
 			return;
 		}
 
-		// Verifica se a password foi inserida
 		if (!password) {
 			setError('Por favor, insira uma senha.');
 			return;
 		}
 
-		// Limpa qualquer erro anterior
 		setError('');
 
-		// Aqui podes adicionar a lógica para autenticar o utilizador (ex: chamada à API)
 		try {
-			const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
-				email, password,
-			});
+			const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, { email, password }, { withCredentials: true });
 
-			const { token, role } = response.data;
-			
-			if(token) {
-				localStorage.setItem('token', token);
+			// Se quiseres, podes receber a role no corpo da resposta, senão podes remover essa parte
+			const { role } = response.data;
 
-				// Redireciona consoante o papel do usuário
-				if (role === 'admin') {
-					navigate('/admin/dashboard');
-				} else {
-					navigate('/user/userdashboard');
-				}
+			if (role === 'admin') {
+				navigate('/admin/dashboard');
+			} else {
+				navigate('/user/userdashboard');
 			}
-		} catch (error){
+		} catch (error) {
 			if (error.response && error.response.data.message) {
 				setError(error.response.data.message);
-			}else {
+			} else {
 				setError('Ocorreu um erro ao efetuar o login. Por favor, tente novamente.');
 			}
 		}

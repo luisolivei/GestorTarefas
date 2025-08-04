@@ -1,11 +1,27 @@
-import { Outlet } from "react-router-dom"
+import { Navigate, Outlet } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import axiosInstance from '../utils/axiosInstance';
 
+const PrivateRoute = ({ allowedRoles }) => {
+	const [isAuthorized, setIsAuthorized] = useState(null); // null = loading
 
+	useEffect(() => {
+		const checkAuth = async () => {
+			try {
+				const res = await axiosInstance.get('/api/auth/profile');
+				const userRole = res.data.role;
+				setIsAuthorized(allowedRoles.includes(userRole));
+			} catch (err) {
+				setIsAuthorized(false);
+			}
+		};
 
-const PrivateRoute = ({allowedRoles}) => {
-  return <Outlet />
-    
-  
-}
+		checkAuth();
+	}, [allowedRoles]);
 
-export default PrivateRoute
+	if (isAuthorized === null) return <p>A verificar autenticação...</p>;
+	if (!isAuthorized) return <Navigate to='/login' replace />;
+	return <Outlet />;
+};
+
+export default PrivateRoute;

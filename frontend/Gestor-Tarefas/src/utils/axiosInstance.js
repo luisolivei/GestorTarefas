@@ -4,6 +4,7 @@ import { BASE_URL } from './apiPaths';
 const axiosInstance = axios.create({
     baseURL: BASE_URL,
     timeout: 10000,
+    withCredentials: true,
     headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -13,10 +14,7 @@ const axiosInstance = axios.create({
 // Request Interceptor
 axiosInstance.interceptors.request.use(
     (config) => {
-        const accessToken = localStorage.getItem('token');
-        if (accessToken) {
-            config.headers.Authorization = `Bearer ${accessToken}`;
-        }
+        
         return config;
     },
     (error) => {
