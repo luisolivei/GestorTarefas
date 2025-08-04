@@ -11,7 +11,7 @@ const PrivateRoute = ({ allowedRoles }) => {
 				const res = await axiosInstance.get('/api/auth/profile');
 				const userRole = res.data.role;
 				setIsAuthorized(allowedRoles.includes(userRole));
-			} catch (err) {
+			} catch {
 				setIsAuthorized(false);
 			}
 		};
