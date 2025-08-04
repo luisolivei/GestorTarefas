@@ -1,4 +1,4 @@
-export const Base_URL = 'http://localhost:8000';
+export const BASE_URL = 'http://localhost:8000';
 
 //utils/apiPaths.js
 export const API_PATHS = {
@@ -17,7 +17,7 @@ export const API_PATHS = {
 	},
 
 	TASKS: {
-		GET_DASHBOARD_DATA: '/api/tasks/user-dashboard-data', // Buscar dados do dashboard do utilizador
+		GET_DASHBOARD_DATA: '/api/tasks/dashboard-data', // Buscar dados do dashboard do utilizador
 		GET_USER_DASHBOARD_DATA: '/api/tasks/user-dashboard-data', // Buscar dados do dashboard do utilizador
 		GET_ALL_TASKS: '/api/tasks', // Buscar todas as tarefas
 		GET_TASK_BY_ID: taskId => `/api/tasks/${taskId}`, // Buscar tarefa por ID
