@@ -6,6 +6,7 @@ import AuthLayout from '../../components/layouts/AuthLayout';
 import axiosInstance from '../../utils/axiosInstance';
 import { API_PATHS } from '../../utils/apiPaths'; // Certifique-se de que o caminho está correto
 
+
 const Login = () => {
 	// Estado para armazenar o email inserido pelo utilizador
 	const [email, setEmail] = useState('');
@@ -38,8 +39,9 @@ const Login = () => {
 
 		// Aqui podes adicionar a lógica para autenticar o utilizador (ex: chamada à API)
 		try {
-			const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN,
-				{ email, password, });
+			const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
+				email, password,
+			});
 
 			const { token, role } = response.data;
 			
@@ -48,12 +50,12 @@ const Login = () => {
 
 				// Redireciona consoante o papel do usuário
 				if (role === 'admin') {
-					navigate('/admin/dashboard-data');
+					navigate('/admin/dashboard');
 				} else {
-					navigate('/user/user-dashboard-data');
+					navigate('/user/userdashboard');
 				}
 			}
-		} catch (error) {
+		} catch (error){
 			if (error.response && error.response.data.message) {
 				setError(error.response.data.message);
 			}else {

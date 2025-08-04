@@ -33,7 +33,7 @@ axiosInstance.interceptors.response.use(
         // Handle common errors globally
         if (error.response) {
             if (error.response.status === 401) {
-                // Redirect to login page~
+                // Redirect to login page
                 window.location.href = '/login';
             } else if (error.response.status === 500) {
                 console.error('Server Error. Please try again later.');
@@ -41,7 +41,6 @@ axiosInstance.interceptors.response.use(
         } else if (error.code === 'ECONNABORTED') {
             console.error('Request timed out. Please try again.');
         }
-        
         return Promise.reject(error);
     }
 );
