@@ -35,10 +35,13 @@ const Login = () => {
 		setError('');
 
 		try {
-			const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, { email, password }, { withCredentials: true });
+			//  Fazer login (cookie HttpOnly será definido automaticamente)
+			await axiosInstance.post(API_PATHS.AUTH.LOGIN, { email, password });
 
-			// Se quiseres, podes receber a role no corpo da resposta, senão podes remover essa parte
-			const { role } = response.data;
+			//  Buscar o perfil do utilizador autenticado
+			const profileResponse = await axiosInstance.get(API_PATHS.AUTH.GET_PROFILE);
+
+			const { role } = profileResponse.data;
 
 			if (role === 'admin') {
 				navigate('/admin/dashboard');
