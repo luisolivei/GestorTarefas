@@ -3,6 +3,7 @@ const {body, validationResult} = require('express-validator');
 const { registerUser, loginUser, getUserProfile, updateUserProfile, logoutUser } = require('../controllers/authController');
 const { protect } = require('../middlewares/authMiddleware');
 const upload = require('../middlewares/uploadMiddleware');
+const sanitizeInputs = require('../middlewares/sanitizeInputs');
 
 const router = express.Router();
 
@@ -29,10 +30,10 @@ const validateLogin = [
 ];
 
 // Rotas de autenticação com validação
-router.post('/register', validateRegister, checkValidationErrors, registerUser); // Registar usuário
-router.post('/login', validateLogin, checkValidationErrors, loginUser); // Login do usuário
+router.post('/register', validateRegister, checkValidationErrors, sanitizeInputs, registerUser); // Registar usuário
+router.post('/login', validateLogin, checkValidationErrors, sanitizeInputs, loginUser); // Login do usuário
 router.get('/profile', protect, getUserProfile); // Buscar perfil do usuário
-router.put('/profile', protect, updateUserProfile); // Update do perfil do usuário
+router.put('/profile', protect, sanitizeInputs, updateUserProfile); // Update do perfil do usuário
 router.post('/logout', protect, logoutUser); // Logout do usuario
 
 router.post('/upload-image', upload.single('image'), (req, res) => {
@@ -44,7 +45,7 @@ router.post('/upload-image', upload.single('image'), (req, res) => {
 });
 
 // Rota de teste para sanitização
-router.post('/teste-sanitize', (req, res) => {
+router.post('/teste-sanitize', sanitizeInputs, (req, res) => {
 	console.log('Body recebido:', req.body);
 	res.json({ recebido: req.body });
 });
