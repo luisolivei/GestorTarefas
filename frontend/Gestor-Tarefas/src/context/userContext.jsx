@@ -1,39 +1,40 @@
-import { useState, useEffect } from 'react';
+import { createContext, useState, useEffect } from 'react';
 import axiosInstance from '../utils/axiosInstance';
 import { API_PATHS } from '../utils/apiPaths';
-import UserContext from './userContext';
+
+
+export const UserContext = createContext(null);
 
 export const UserProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
+		let isMounted = true;
 		const fetchUser = async () => {
 			try {
-				// Com cookies HttpOnly, não precisas verificar localStorage
-				const response = await axiosInstance.get(API_PATHS.AUTH.GET_PROFILE, {
-					withCredentials: true, // garante envio de cookies
-				});
-				setUser(response.data);
-			} catch (error) {
-				console.error('Error fetching user:', error);
-				setUser(null);
+				const response = await axiosInstance.get(API_PATHS.AUTH.GET_PROFILE);
+				if (isMounted) setUser(response.data);
+			} catch {
+				if (isMounted) setUser(null);
 			} finally {
-				setLoading(false);
+				if (isMounted) setLoading(false);
 			}
 		};
-
 		fetchUser();
+		return () => {
+			isMounted = false;
+		};
 	}, []);
 
 	const updateUser = updatedUser => {
 		setUser(updatedUser);
-		
+		setLoading(false);
 	};
 
 	const clearUser = () => {
 		setUser(null);
-		
+		setLoading(false);
 	};
 
 	return <UserContext.Provider value={{ user, loading, updateUser, clearUser }}>{children}</UserContext.Provider>;

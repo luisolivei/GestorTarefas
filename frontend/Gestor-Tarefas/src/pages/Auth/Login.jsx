@@ -38,26 +38,29 @@ const Login = () => {
 		setError('');
 
 		try {
-			//  Fazer login (cookie HttpOnly será definido automaticamente)
-			await axiosInstance.post(API_PATHS.AUTH.LOGIN, { email, password });
+			// Fazer login — cookie HttpOnly definido automaticamente
+			const loginResponse = await axiosInstance.post(API_PATHS.AUTH.LOGIN, { email, password });
 
-			//  Buscar o perfil do utilizador autenticado
-			const profileResponse = await axiosInstance.get(API_PATHS.AUTH.GET_PROFILE);
+			// Se a API de login já devolve o user, usa direto
+			let userData = loginResponse.data?.user;
 
-			// Atualizar o estado global com os dados do utilizador autenticado
-			updateUser(profileResponse.data);
+			// Caso contrário, busca o perfil
+			if (!userData) {
+				const profileResponse = await axiosInstance.get(API_PATHS.AUTH.GET_PROFILE);
+				userData = profileResponse.data;
+			}
 
-			const { role } = profileResponse.data;
+			// Atualiza o estado global
+			updateUser(userData);
 
-			
-
-			if (role === 'admin') {
+			// Redireciona com base no role
+			if (userData.role === 'admin') {
 				navigate('/admin/dashboard');
 			} else {
-				navigate('/user/userdashboard');
+				navigate('/user/dashboard');
 			}
 		} catch (error) {
-			if (error.response && error.response.data.message) {
+			if (error.response?.data?.message) {
 				setError(error.response.data.message);
 			} else {
 				setError('Ocorreu um erro ao efetuar o login. Por favor, tente novamente.');
