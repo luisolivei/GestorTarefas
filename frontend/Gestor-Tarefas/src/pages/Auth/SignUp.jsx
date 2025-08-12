@@ -1,9 +1,13 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import AuthLayout from '../../components/layouts/AuthLayout';
 import ProfilePhotoSelector from '../../components/Inputs/ProfilePhotoSelector';
 import Input from '../../components/Inputs/Input';
 import { validateEmail } from '../../utils/helper';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axiosInstance from '../../utils/axiosInstance';
+import { API_PATHS } from '../../utils/apiPaths';
+import { UserContext } from '../../context/userContext';
+import uploadImage from '../../utils/uploadImage';
 
 const SignUp = () => {
 	const [profilePicture, setProfilePicture] = useState(null);
@@ -14,8 +18,15 @@ const SignUp = () => {
 
 	const [error, setError] = useState(null);
 
+	const {updateUser} = useContext(UserContext);
+
+	// Hook para navegar programaticamente entre rotas
+	const navigate = useNavigate()
+
 	const handleSignUp = async e => {
 		e.preventDefault(); // Evita o comportamento padrão de recarregar a página ao submeter o formulário
+
+		let profileImageUrl = ""
 
 		// Valida o nome completo; se estiver vazio, define a mensagem de erro
 		if (!fullName) {
@@ -39,6 +50,38 @@ const SignUp = () => {
 		setError('');
 
 		// Aqui podes adicionar a lógica para registar o utilizador (ex: chamada à API)
+		try {
+
+			// Fazer upload da imagem se existir
+			if (profilePicture) {
+				const imgUploadRes = await uploadImage(profilePicture);
+				profileImageUrl = imgUploadRes.imageUrl || "";
+			}
+			const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, { name: fullName, email, password, profileImageUrl, adminInviteToken });
+
+			let userData = response.data?.user;
+
+			// Atualiza o estado global
+			updateUser(userData);
+
+			// Redireciona com base no role
+			if (userData.role === 'admin') {
+				navigate('/admin/dashboard');
+			} else {
+				navigate('/user/dashboard');
+			}
+
+
+
+			
+
+		} catch (error) {
+			if (error.response?.data?.message) {
+				setError(error.response.data.message);
+			} else {
+				setError('Ocorreu um erro ao efetuar o registo. Por favor, tente novamente.');
+			}
+		}
 	};
 	return (
 		<AuthLayout>
