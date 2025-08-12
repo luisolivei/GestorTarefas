@@ -5,6 +5,7 @@ import { validateEmail } from '../../utils/helper';
 import AuthLayout from '../../components/layouts/AuthLayout';
 import axiosInstance from '../../utils/axiosInstance';
 import { API_PATHS } from '../../utils/apiPaths'; // Certifique-se de que o caminho está correto
+import { UserContext } from '../../context/userContext';
 
 
 const Login = () => {
@@ -14,6 +15,8 @@ const Login = () => {
 	const [password, setPassword] = useState('');
 	// Estado para armazenar mensagens de erro
 	const [error, setError] = useState(null);
+
+	const {updateUser} = useContext(UserContext);
 
 	// Hook para navegar programaticamente entre rotas
 	const navigate = useNavigate();
@@ -41,7 +44,12 @@ const Login = () => {
 			//  Buscar o perfil do utilizador autenticado
 			const profileResponse = await axiosInstance.get(API_PATHS.AUTH.GET_PROFILE);
 
+			// Atualizar o estado global com os dados do utilizador autenticado
+			updateUser(profileResponse.data);
+
 			const { role } = profileResponse.data;
+
+			
 
 			if (role === 'admin') {
 				navigate('/admin/dashboard');
