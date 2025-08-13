@@ -87,7 +87,7 @@ const SignUp = () => {
 
 					{/* Mensagens de erro ou sucesso */}
 					{error && <p className='text-red-500 text-sm mt-2'>{error}</p>}
-					{success && <p className='text-green-500 text-sm mt-2'>Conta criada com sucesso! A redirecionar para login...</p>}
+					{success && <p className='text-green-700 text-sm mt-2'>Conta criada com sucesso! A redirecionar para login...</p>}
 
 					<button type='submit' className='btn-primary mt-4'>
 						Registar
