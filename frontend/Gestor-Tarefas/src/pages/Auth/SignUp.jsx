@@ -17,64 +17,47 @@ const SignUp = () => {
 	const [adminInviteToken, setAdminInviteToken] = useState('');
 
 	const [error, setError] = useState(null);
+	const [success, setSuccess] = useState(false); // Estado para sucesso
 
-	const {updateUser} = useContext(UserContext);
-
-	// Hook para navegar programaticamente entre rotas
-	const navigate = useNavigate()
+	const { updateUser } = useContext(UserContext);
+	const navigate = useNavigate();
 
 	const handleSignUp = async e => {
-		e.preventDefault(); // Evita o comportamento padrão de recarregar a página ao submeter o formulário
+		e.preventDefault();
 
-		let profileImageUrl = ""
+		if (!fullName) return setError('Por favor, insira o seu nome.');
+		if (!validateEmail(email)) return setError('Por favor, insira um email válido.');
+		if (!password) return setError('Por favor, insira a sua palavra-passe.');
 
-		// Valida o nome completo; se estiver vazio, define a mensagem de erro
-		if (!fullName) {
-			setError('Por favor, insira o seu nome.');
-			return;
-		}
-
-		// Valida o email; se for inválido, define a mensagem de erro
-		if (!validateEmail(email)) {
-			setError('Por favor, insira o seu email.');
-			return;
-		}
-
-		// Verifica se a palavra-passe foi inserida
-		if (!password) {
-			setError('Por favor, insira a sua palavra-passe.');
-			return;
-		}
-
-		// Limpa qualquer erro anterior
 		setError('');
+		setSuccess(false);
 
-		// Aqui podes adicionar a lógica para registar o utilizador (ex: chamada à API)
 		try {
+			const { imageUrl: profileImageUrl } = await uploadImage(profilePicture);
 
-			// Fazer upload da imagem se existir
-			if (profilePicture) {
-				const imgUploadRes = await uploadImage(profilePicture);
-				profileImageUrl = imgUploadRes.imageUrl || "";
-			}
-			const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, { name: fullName, email, password, profileImageUrl, adminInviteToken });
+			// Requisição de registo — cookie HttpOnly será definido no backend
+			await axiosInstance.post(API_PATHS.AUTH.REGISTER, {
+				name: fullName,
+				email,
+				password,
+				profileImageUrl,
+				adminInviteToken,
+			});
 
-			let userData = response.data?.user;
+			// Indica sucesso
+			setSuccess(true);
 
-			// Atualiza o estado global
-			updateUser(userData);
+			// Limpar campos (opcional)
+			setFullName('');
+			setEmail('');
+			setPassword('');
+			setAdminInviteToken('');
+			setProfilePicture(null);
 
-			// Redireciona com base no role
-			if (userData.role === 'admin') {
-				navigate('/admin/dashboard');
-			} else {
-				navigate('/user/dashboard');
-			}
-
-
-
-			
-
+			// Redireciona após 2 segundos para o login
+			setTimeout(() => {
+				navigate('/login');
+			}, 2000);
 		} catch (error) {
 			if (error.response?.data?.message) {
 				setError(error.response.data.message);
@@ -83,6 +66,7 @@ const SignUp = () => {
 			}
 		}
 	};
+
 	return (
 		<AuthLayout>
 			<div className='w-full max-w-md mx-auto bg-white/60 p-6 rounded-lg shadow-md'>
@@ -94,25 +78,21 @@ const SignUp = () => {
 					<div>
 						<Input value={fullName} onChange={({ target }) => setFullName(target.value)} label='Nome completo' placeholder='Insira o seu nome completo' type='text' />
 
-						{/* Campo de email */}
 						<Input value={email} onChange={({ target }) => setEmail(target.value)} label='Email' placeholder='john@example.com' type='text' />
 
-						{/* Campo da palavra-passe */}
 						<Input value={password} onChange={({ target }) => setPassword(target.value)} label='Palavra-passe' placeholder='Mínimo 6 caracteres' type='password' />
 
-						{/* Campo do token de convite de administrador */}
 						<Input value={adminInviteToken} onChange={({ target }) => setAdminInviteToken(target.value)} label='Token de Convite de Administrador' placeholder='Digite' type='text' />
 					</div>
 
-					{/* Mensagem de erro */}
+					{/* Mensagens de erro ou sucesso */}
 					{error && <p className='text-red-500 text-sm mt-2'>{error}</p>}
+					{success && <p className='text-green-500 text-sm mt-2'>Conta criada com sucesso! A redirecionar para login...</p>}
 
-					{/* Botão de submissão do formulário */}
-					<button type='submit' className='btn-primary'>
+					<button type='submit' className='btn-primary mt-4'>
 						Registar
 					</button>
 
-					{/* Link para a página de login */}
 					<p className='text-[13px] text-slate-800 mt-3'>
 						Já tem uma conta?{' '}
 						<Link className='font-semibold text-[13px] text-primary underline' to='/login'>
