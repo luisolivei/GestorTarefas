@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect } from 'react';
 import axiosInstance from '../utils/axiosInstance';
 import { API_PATHS } from '../utils/apiPaths';
-
+import { registerClearUser } from '../utils/authHelper';
 
 export const UserContext = createContext(null);
 
@@ -9,7 +9,15 @@ export const UserProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
 	const [loading, setLoading] = useState(true);
 
+	const clearUser = () => {
+		setUser(null);
+		setLoading(false);
+	};
+
 	useEffect(() => {
+		// Regista a função para que o axiosInstance possa limpá-la no 401
+		registerClearUser(clearUser);
+
 		let isMounted = true;
 		const fetchUser = async () => {
 			try {
@@ -22,6 +30,7 @@ export const UserProvider = ({ children }) => {
 			}
 		};
 		fetchUser();
+
 		return () => {
 			isMounted = false;
 		};
@@ -29,11 +38,6 @@ export const UserProvider = ({ children }) => {
 
 	const updateUser = updatedUser => {
 		setUser(updatedUser);
-		setLoading(false);
-	};
-
-	const clearUser = () => {
-		setUser(null);
 		setLoading(false);
 	};
 

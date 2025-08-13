@@ -52,7 +52,7 @@ const RootRedirect = () => {
 	const { user, loading } = useContext(UserContext);
 
 	if (loading) {
-		return <p>A carregar...</p>; // Aqui podes meter um spinner
+		return <p>A carregar...</p>;
 	}
 
 	if (!user) {
