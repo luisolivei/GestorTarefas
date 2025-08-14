@@ -9,53 +9,53 @@ import {
 export const SIDE_MENU_DATA = [
 	{
 		id: '01',
-		name: 'Dashboard',
+		label: 'Dashboard',
 		icon: LuLayoutDashboard,
 		path: '/admin/dashboard',
 	},
 	{
 		id: '02',
-		name: 'Manage Tasks',
+		label: 'Manage Tasks',
 		icon: LuClipboardCheck,
 		path: '/admin/tasks',
 	},
 	{
 		id: '03',
-		name: 'Create Tasks',
+		label: 'Create Tasks',
 		icon: LuSquarePlus,
 		path: '/admin/create-task',
 	},
 	{
 		id: '04',
-		name: 'Team Members',
+		label: 'Team Members',
 		icon: LuUsers,
 		path: '/admin/users',
 	},
 	{
 		id: '05',
-        name: 'Logout',
+        label: 'Logout',
         icon: LuLogOut,
         path: '/logout',
 		
-	},
+	}
 ];
 
 export const SIDE_MENU_USER_DATA = [
     {
         id: '01',
-        name: 'Dashboard',
+        label: 'Dashboard',
         icon: LuLayoutDashboard,
         path: '/user/dashboard',
     },
     {
         id: '02',
-        name: 'My Tasks',
+        label: 'My Tasks',
         icon: LuClipboardCheck,
         path: '/user/tasks',
     },
     {
         id: '05',
-        name: 'Logout',
+        label: 'Logout',
         icon: LuLogOut,
         path: 'logout',
     },
@@ -64,15 +64,15 @@ export const SIDE_MENU_USER_DATA = [
 export const PRIORITY_DATA = [
     {
         label: 'Low',
-        value: 'Low',
+        value: 'Low'
     },
     {
         label: 'Medium',
-        value: 'Medium',
+        value: 'Medium'
     },
     {
         label: 'High',
-        value: 'High',
+        value: 'High'
     },
 ];
 
