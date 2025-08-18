@@ -1,80 +1,78 @@
-import DashboardLayout from "../../components/layouts/DashboardLayout";
-import { useUserAuth } from "../../hooks/useUserAuth"
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../context/userContext";
-import axiosInstance from "../../utils/axiosInstance";
-import { useNavigate } from "react-router-dom";
-import { API_PATHS } from "../../utils/apiPaths";
-import moment from "moment";
-import { addThousandsSeparator } from "../../utils/helper";
-import InfoCard from "../../components/Cards/InfoCard";
-import { LuArrowRight } from "react-icons/lu";
-import TaskListTable from "../../components/TaskListTable";
-import CustomPieChart from "../../components/Charts/CustomPieChart";
-import CustomBarChart from "../../components/Charts/CustomBarChart";
+import DashboardLayout from '../../components/layouts/DashboardLayout';
+import { useUserAuth } from '../../hooks/useUserAuth';
+import { useContext, useEffect, useState } from 'react';
+import { UserContext } from '../../context/userContext';
+import axiosInstance from '../../utils/axiosInstance';
+import { useNavigate } from 'react-router-dom';
+import { API_PATHS } from '../../utils/apiPaths';
+import moment from 'moment';
+import { addThousandsSeparator } from '../../utils/helper';
+import InfoCard from '../../components/Cards/InfoCard';
+import { LuArrowRight } from 'react-icons/lu';
+import TaskListTable from '../../components/TaskListTable';
+import CustomPieChart from '../../components/Charts/CustomPieChart';
+import CustomBarChart from '../../components/Charts/CustomBarChart';
 
-const COLORS = ["#8D51FF", "#00B8DB", "#7BCE00"];
+const COLORS = ['#8D51FF', '#00B8DB', '#7BCE00'];
 
 const Dashboard = () => {
-  useUserAuth();
-  const { user } = useContext(UserContext);
+	useUserAuth();
+	const { user } = useContext(UserContext);
 
-  const navigate = useNavigate();
+	const navigate = useNavigate();
 
-  const [dashboardData, setDashboardData] = useState(null);
-  const [pieChartData, setPieChartData] = useState([]); 
-  const [barChartData, setBarChartData] = useState([]);
+	const [dashboardData, setDashboardData] = useState(null);
+	const [pieChartData, setPieChartData] = useState([]);
+	const [barChartData, setBarChartData] = useState([]);
 
-  const prepareChartData = (data) => {
-    const taskDistribution = data?.taskDistribution || null;
-    const taskPriorityLevels = data?.taskPriorityLevels || null;
+	const prepareChartData = data => {
+		const taskDistribution = data?.taskDistribution || null;
+		const taskPriorityLevels = data?.taskPriorityLevels || null;
 
-    const taskDistributionData = [
-      { status: 'Pending', count: taskDistribution?.Pending || 0 },
-      { status: 'In Progress', count: taskDistribution?.InProgress || 0 },
-      { status: 'Completed', count: taskDistribution?.Completed || 0 },
-    ];
+		const taskDistributionData = [
+			{ status: 'Pending', count: taskDistribution?.Pending || 0 },
+			{ status: 'In Progress', count: taskDistribution?.InProgress || 0 },
+			{ status: 'Completed', count: taskDistribution?.Completed || 0 },
+		];
 
-    setPieChartData(taskDistributionData);
+		setPieChartData(taskDistributionData);
 
-    const PriorityLevelData = [
-      { priority: 'Low', count: taskPriorityLevels?.Low || 0 },
-      { priority: 'Medium', count: taskPriorityLevels?.Medium || 0 },
-      { priority: 'High', count: taskPriorityLevels?.High || 0 },
-    ];
+		const PriorityLevelData = [
+			{ priority: 'Low', count: taskPriorityLevels?.Low || 0 },
+			{ priority: 'Medium', count: taskPriorityLevels?.Medium || 0 },
+			{ priority: 'High', count: taskPriorityLevels?.High || 0 },
+		];
 
-    setBarChartData(PriorityLevelData);
-  };
-  
-  const getDashboardData = async () => {
-    try {
-      const response = await axiosInstance.get(API_PATHS.TASKS.GET_DASHBOARD_DATA);
-      if (response.data) {
-        setDashboardData(response.data);
-        prepareChartData(response.data?.charts || null);
-      }
+		setBarChartData(PriorityLevelData);
+	};
 
-    } catch (error) {
-      console.error("Error fetching dashboard data:", error);
-    }
-  };
+	const getDashboardData = async () => {
+		try {
+			const response = await axiosInstance.get(API_PATHS.TASKS.GET_DASHBOARD_DATA);
+			if (response.data) {
+				setDashboardData(response.data);
+				prepareChartData(response.data?.charts || null);
+			}
+		} catch (error) {
+			console.error('Error fetching dashboard data:', error);
+		}
+	};
 
-  const onSeeMore = () => {
-    navigate("/admin/tasks");
-  };
+	const onSeeMore = () => {
+		navigate('/admin/tasks');
+	};
 
-  useEffect(() => {
-    getDashboardData();
-    return () => {
-      
-    }
-  }, []);
-  return (
+	useEffect(() => {
+		getDashboardData();
+		return () => {};
+	}, []);
+
+	return (
 		<DashboardLayout activeMenu='Dashboard'>
 			<div className='card my-5'>
 				<div>
 					<div className='col-span-3'>
-						<h2 className='text-xl md:text-2xl'>Bom dia! {user?.name}</h2>
+						<h2 className='text-xl md:text-2xl'>Bem vindo! {user?.name}</h2>
 						<p className='text-xs md:text-[13px] text-gray-400 mt-1.5'>{moment().format('dddd Do MMM YYYY')}</p>
 					</div>
 				</div>
@@ -121,7 +119,7 @@ const Dashboard = () => {
 				</div>
 			</div>
 		</DashboardLayout>
-	); 
-}
+	);
+};
 
 export default Dashboard;
