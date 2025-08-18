@@ -45,7 +45,11 @@ app.use((req, res, next) => {
 });
 
 // Middleware Helmet para definir cabeçalhos HTTP seguros
-app.use(helmet());
+app.use(helmet(
+	{
+		crossOriginResourcePolicy: false,
+	}
+));
 
 // Rotas
 app.use('/api/auth', authRoutes);
