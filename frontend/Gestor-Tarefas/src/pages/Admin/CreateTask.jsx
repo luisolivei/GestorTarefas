@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 import moment from 'moment';
 import { LuTrash2 } from 'react-icons/lu';
 import SelectDropdown from '../../components/Inputs/SelectDropdown';
+import SelectUsers from '../../components/Inputs/SelectUsers';
 
 const CreateTask = () => {
 	const location = useLocation();
@@ -93,7 +94,7 @@ const CreateTask = () => {
 							<div className='col-span-6 md:col-span-4'>
 								<label className='text-xs font-medium text-slate-600'>Priority</label>
 
-								<SelectDropdown options={PRIORITY_DATA} value={taskData.priority} onChange={value => handleValueChange('priority', value)} placeholder='Select Priority' />
+								<SelectDropdown options={PRIORITY_DATA} value={taskData.priority} onChange={(value) => handleValueChange('priority', value)} placeholder='Select Priority' />
 							</div>
 
 							<div className='col-span-6 md:col-span-4'>
@@ -103,11 +104,11 @@ const CreateTask = () => {
 							</div>
 
 							<div className='col-span-12 md:col-span-3'>
-								<label className='text-xs font-medium text-slate-600'>Assigned To</label>
+								<label className='text-xs font-medium text-slate-600'>Assign To</label>
 
 								<SelectUsers
 									selectedUsers={taskData.assignedTo}
-									setSelectedUsers={value => {
+									setSelectedUsers={(value) => {
 										handleValueChange('assignedTo', value);
 									}}
 								/>
