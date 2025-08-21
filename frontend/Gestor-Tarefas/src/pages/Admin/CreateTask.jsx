@@ -23,7 +23,7 @@ const CreateTask = () => {
 		priority: 'Low',
 		dueDate: '',
 		assignedTo: [],
-		todoChecklist: [],
+		todoCheckList: [],
 		attachments: [],
 	});
 
@@ -54,7 +54,31 @@ const CreateTask = () => {
 	};
 
 	// Create Task
-	const createTask = async () => {};
+	const createTask = async () => {
+		setLoading(true);
+
+		try {
+			const todoList = taskData.todoCheckList?.map((item) => ({
+				text: item,
+				completed: false,
+			}));
+
+			const response = await axiosInstance.post(API_PATHS.TASKS.CREATE_TASK, {
+				...taskData,
+				todoCheckList: todoList,
+				dueDate: new Date(taskData.dueDate).toISOString(),
+			});
+
+			toast.success('Task created successfully!');
+
+			clearData();
+		}catch (error) {
+			console.error('Error creating task:', error);
+			setLoading(false);
+		}finally {
+			setLoading(false);
+		}
+	};
 
 	// Update Task
 	const updateTask = async () => {};
@@ -81,7 +105,7 @@ const CreateTask = () => {
 			return;
 		}
 
-		if (taskData.todoChecklist?.length === 0) {
+		if (taskData.todoCheckList?.length === 0) {
 			setError('Task must have at least one TODO item.');
 			return;
 		}
@@ -153,10 +177,10 @@ const CreateTask = () => {
 						<div className="mt-3">
 							<label className="text-xs font-medium text-slate-600">TODO Checklist</label>
 							<TodoListInput
-								todoList={taskData?.todoChecklist}
-								setTodoList={(value) => {
-									handleValueChange('todoChecklist', value);
-								}}
+								todoList={taskData?.todoCheckList}
+								setTodoList={(value) => 
+									handleValueChange('todoCheckList', value)
+								}
 							/>
 						</div>
 

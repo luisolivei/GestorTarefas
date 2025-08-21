@@ -13,17 +13,18 @@ const TodoListInput = ({ todoList, setTodoList }) => {
 	};
 
 	// Function to handle delete a option
-	const handleDeleteOption = index => {
-		const updateArr = todoList.filter((_, i) => i !== index);
+	const handleDeleteOption = (index) => {
+		const updateArr = todoList.filter((_, idx) => idx !== index);
 		setTodoList(updateArr);
 	};
 	return (
 		<div>
 			{todoList.map((item, index) => (
-				<div key={index} className='flex justify-between bg-gray-50 border border-gray-100 px-3 py-2 rounded-md mb-3 mt-2'>
+				<div key={item} className='flex justify-between bg-gray-50 border border-gray-100 px-3 py-2 rounded-md mb-3 mt-2'>
 					<p className='text-xs text-black'>
                         <span className='text-xs text-gray-400 font-semibold mr-2'>
-                            {index < 9 ? `0${index + 1}` : index + 1}.</span>
+                            {index < 9 ? `0${index + 1}` : index + 1}
+                        </span>
 						{item}
 					</p>
 
