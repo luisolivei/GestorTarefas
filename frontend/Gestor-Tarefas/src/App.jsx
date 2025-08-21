@@ -13,6 +13,7 @@ import SignUp from './pages/Auth/SignUp';
 import PrivateRoute from './routes/PrivateRoute';
 
 import UserProvider, { UserContext } from './context/userContext';
+import { Toaster } from 'react-hot-toast';
 
 const App = () => {
 	return (
@@ -41,6 +42,16 @@ const App = () => {
 					{/* Default Redirect */}
 					<Route path='/*' element={<RootRedirect />} />
 				</Routes>
+
+				<Toaster
+					toastOptions={{ 
+						className: 'bg-gray-800 text-white',
+						style: {
+							fontSize: '13px',
+							
+						},
+					}}
+				/>
 			</UserProvider>
 		</Router>
 	);
