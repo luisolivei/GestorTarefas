@@ -7,7 +7,7 @@ import AvatarGroup from '../AvatarGroup';
 
 const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
 	const [allUsers, setAllUsers] = useState([]);
-	const [isModalOpen, setIsModalOpen] = useState(true);
+	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [tempSelectedUsers, setTempSelectedUsers] = useState([]);
 
 	const getAllUsers = async () => {
@@ -66,7 +66,7 @@ const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
 								<p className='font-medium text-gray-800 dark:text-white'>{user.name}</p>
 								<p className='text-[13px] text-gray-500'>{user.email}</p>
 							</div>
-							<input type='checkbox' checked={tempSelectedUsers.includes(user._id)} onChange={() => toggleUserSelection(user._id)} className='w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded-sm outline-none' />
+							<input type='checkbox' checked={tempSelectedUsers.includes(user._id)} onChange={() => toggleUserSelection(user._id)} className='w-4 h-4 accent-primary bg-gray-100 border-gray-300 rounded-sm outline-none' />
 						</div>
 					))}
                 </div>
