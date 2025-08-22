@@ -2,7 +2,8 @@ import React from 'react';
 
 const TaskStatusTabs = ({tabs, activeTab, setActiveTab}) => {
 
-    return <div className='my-2'>
+    return (
+    <div className='my-2'>
         <div className='flex'>
             {tabs.map((tab) => (
                 <button
@@ -25,7 +26,8 @@ const TaskStatusTabs = ({tabs, activeTab, setActiveTab}) => {
                 </button>
             ))}
         </div>
-    </div>
+    </div >
+    );
 };
 
 
