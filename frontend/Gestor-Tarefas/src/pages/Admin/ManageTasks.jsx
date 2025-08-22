@@ -21,7 +21,7 @@ const ManageTasks = () => {
 				params: { status: filterStatus === 'All' ? '' : filterStatus },
 			});
 
-			setAllTasks(response.data?.length > 0 ? response.data.tasks : []);
+			setAllTasks(response.data?.tasks?.length > 0 ? response.data.tasks : []);
 
 			// Map statusSummary data with lables and order
 			const statusSummary = response.data?.statusSummary || {};
@@ -53,7 +53,7 @@ const ManageTasks = () => {
 	return (
 		<DashboardLayout activeMenu='Manage Tasks'>
 			<div className='my-5'>
-				<div className='flex flex-col md:flex-row lg:items-center justify-between'>
+				<div className='flex flex-col lg:flex-row lg:items-center justify-between'>
 					<div className='flex items-center justify-between gap-3'>
 						<h2 className='text-xl md:text-xl font-medium'>My Tasks</h2>
 
@@ -72,6 +72,7 @@ const ManageTasks = () => {
 						</div>
 					)}
 				</div>
+			
 				
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
 					{allTasks?.map((item, index) => (
@@ -87,7 +88,7 @@ const ManageTasks = () => {
 							assignedTo={item.assignedTo?.map((item) => item.profileImageUrl)}
 							attachmentCount={item.attachments?.length || 0}
 							completedTodoCount={item.completedTodoCount || 0}
-							todoCheckList={item.todoCheckList || []}
+							todoChecklist={item.todoChecklist || []}
 							onClick={() => { handleClick(item); }}
 						/>
 					))}						

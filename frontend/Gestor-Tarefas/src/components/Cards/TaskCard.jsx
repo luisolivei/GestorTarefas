@@ -3,7 +3,7 @@ import AvatarGroup from '../AvatarGroup';
 import { LuPaperclip } from 'react-icons/lu';
 import moment from 'moment';
 
-const TaskCard = ({ title, description, priority, status, progress, createdAt, dueDate, assignedTo, attachmentCount, completedTodoCount, todoCheckList, onClick }) => {
+const TaskCard = ({ title, description, priority, status, progress, createdAt, dueDate, assignedTo, attachmentCount, completedTodoCount, todoChecklist, onClick }) => {
 	const getStatusTagColor = () => {
 		switch (status) {
 			case 'In Progress':
@@ -38,26 +38,22 @@ const TaskCard = ({ title, description, priority, status, progress, createdAt, d
 				<p className='text-[13px] text-gray-700/80 font-medium mt-2 mb-2 leading-[18px]'>
 					Task Done:{' '}
 					<span className='font-semibold text-gray-700'>
-						{completedTodoCount}/{todoCheckList.length || 0}
+						{completedTodoCount}/{todoChecklist?.length ?? 0}
 					</span>
 				</p>
 				<Progress progress={progress} status={status} />
 			</div>
 
-			<div className="px-4">
-				<div className="flex items-center justify-between my-1">
+			<div className='px-4'>
+				<div className='flex items-center justify-between my-1'>
 					<div>
 						<label className='text-xs text-gray-500'>Start Date</label>
-						<p className="text-[13px] font-medium text-gray-900">
-							{moment(createdAt).format('Do MMM YYYY')}
-						</p>
+						<p className='text-[13px] font-medium text-gray-900'>{moment(createdAt).format('Do MMM YYYY')}</p>
 					</div>
 
 					<div>
 						<label className='text-xs text-gray-500'>Due Date</label>
-						<p className="text-[13px] font-medium text-gray-900">
-							{moment(dueDate).format('Do MMM YYYY')}
-						</p>
+						<p className='text-[13px] font-medium text-gray-900'>{moment(dueDate).format('Do MMM YYYY')}</p>
 					</div>
 				</div>
 
@@ -65,7 +61,7 @@ const TaskCard = ({ title, description, priority, status, progress, createdAt, d
 					<AvatarGroup avatars={assignedTo || []} />
 					{attachmentCount > 0 && (
 						<div className='flex items-center gap-2 bg-blue-50 px-2.5 py-1.5 rounded-lg'>
-							<LuPaperclip className='text-primary' /> {""}
+							<LuPaperclip className='text-primary' /> {''}
 							<span className='text-xs text-gray-900'>{attachmentCount}</span>
 						</div>
 					)}
