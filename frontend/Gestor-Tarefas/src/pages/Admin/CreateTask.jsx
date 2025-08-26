@@ -97,13 +97,14 @@ const CreateTask = () => {
 				};
 			});
 
-			const response = await axiosInstance.put
-				(API_PATHS.TASKS.UPDATE_TASK(taskId),
-					{
-						...taskData,
-						dueDate: new Date(taskData.dueDate).toISOString(),
-						todoChecklist: todoList,
-					});
+			const response = await axiosInstance.put(
+				API_PATHS.TASKS.UPDATE_TASK(taskId),
+				{
+					...taskData,
+					dueDate: new Date(taskData.dueDate).toISOString(),
+					todoChecklist: todoList,
+				}
+			);
 
 			toast.success('Task updated successfully!');
 
