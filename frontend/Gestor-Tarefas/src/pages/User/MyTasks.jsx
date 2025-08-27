@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import DashboardLayout from '../../components/layouts/DashboardLayout';
 import { useNavigate } from 'react-router-dom';
 import { API_PATHS } from '../../utils/apiPaths';
@@ -15,7 +15,7 @@ const MyTasks = () => {
 
 	const navigate = useNavigate();
 
-	const getAllTasks = async () => {
+	const getAllTasks = useCallback(async () => {
 		try {
 			const response = await axiosInstance.get(API_PATHS.TASKS.GET_ALL_TASKS, {
 				params: { status: filterStatus === 'All' ? '' : filterStatus },
@@ -36,7 +36,7 @@ const MyTasks = () => {
 		} catch (error) {
 			console.error('Error fetching users:', error);
 		}
-	};
+	}, [filterStatus]);
 
 	const handleClick = (taskId) => {
 		navigate(`/user/task-details/${taskId}`);
@@ -45,7 +45,7 @@ const MyTasks = () => {
 	useEffect(() => {
 		getAllTasks();
 		return () => {};
-	}, [filterStatus]);
+	}, [getAllTasks]);
 
 	return (
 		<DashboardLayout activeMenu='My Tasks'>
@@ -61,7 +61,7 @@ const MyTasks = () => {
 				</div>
 
 				<div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-4'>
-					{allTasks?.map((item, index) => (
+					{allTasks?.map((item) => (
 						<TaskCard
 							key={item._id}
 							title={item.title}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import { useParams } from "react-router-dom";
@@ -24,7 +24,7 @@ const ViewTaskDetails = () => {
     }
   };
 
-  const getTaskDetailsByID = async () => {
+  const getTaskDetailsByID = useCallback(async () => {
     try {
       const response = await axiosInstance.get(API_PATHS.TASKS.GET_TASK_BY_ID(id));
       if (response.data) {
@@ -35,7 +35,7 @@ const ViewTaskDetails = () => {
       console.error('Error fetching task details:', error);
       
     }
-  };
+  }, [id]);
 
   const handleToggle = async todoId => {
 		// Novo checklist atualizado
@@ -90,7 +90,7 @@ const ViewTaskDetails = () => {
         
     }
     return () => { };
-  }, [id]);
+  }, [id, getTaskDetailsByID]);
 
 
   
