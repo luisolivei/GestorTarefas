@@ -3,7 +3,7 @@ import AvatarGroup from '../AvatarGroup';
 import { LuPaperclip } from 'react-icons/lu';
 import moment from 'moment';
 
-const TaskCard = ({ title, description, priority, status, progress, createdAt, dueDate, assignedTo, attachmentCount, completedTodoCount, todoChecklist, onClick }) => {
+const TaskCard = ({ title, description, priority, status, createdAt, dueDate, assignedTo, attachmentCount, completedTodoCount, todoChecklist, onClick }) => {
 	const getStatusTagColor = () => {
 		switch (status) {
 			case 'In Progress':
@@ -25,8 +25,13 @@ const TaskCard = ({ title, description, priority, status, progress, createdAt, d
 				return 'text-rose-500 bg-rose-50 border border-rose-500/10';
 		}
 	};
+
+	// ✅ calcular progresso real baseado no checklist
+	const totalTodos = todoChecklist?.length ?? 0;
+	const percent = totalTodos > 0 ? (completedTodoCount / totalTodos) * 100 : 0;
+
 	return (
-		<div className='bg-white rounded-xl py-4 shadow-md shadow-gray-100 border border-gray-200/50 cursor-pointer ' onClick={onClick}>
+		<div className='bg-white rounded-xl py-4 shadow-md shadow-gray-100 border border-gray-200/50 cursor-pointer' onClick={onClick}>
 			<div className='flex items-end gap-3 px-4'>
 				<div className={`text-[11px] font-medium ${getStatusTagColor()} px-4 py-0.5 rounded`}>{status}</div>
 				<div className={`text-[11px] font-medium ${getPriorityTagColor()} px-4 py-0.5 rounded`}>{priority} Priority</div>
@@ -38,10 +43,12 @@ const TaskCard = ({ title, description, priority, status, progress, createdAt, d
 				<p className='text-[13px] text-gray-700/80 font-medium mt-2 mb-2 leading-[18px]'>
 					Task Done:{' '}
 					<span className='font-semibold text-gray-700'>
-						{completedTodoCount}/{todoChecklist?.length ?? 0}
+						{completedTodoCount}/{totalTodos}
 					</span>
 				</p>
-				<Progress progress={progress} status={status} />
+
+				{/* ✅ usa percent em vez de progress da prop */}
+				<Progress progress={percent} status={status} />
 			</div>
 
 			<div className='px-4'>
@@ -70,6 +77,5 @@ const TaskCard = ({ title, description, priority, status, progress, createdAt, d
 		</div>
 	);
 };
-
 
 export default TaskCard;

@@ -23,6 +23,7 @@ const App = () => {
 					{/* Auth Routes */}
 					<Route path='/login' element={<Login />} />
 					<Route path='/signUp' element={<SignUp />} />
+					
 
 					{/* Admin Routes */}
 					<Route element={<PrivateRoute allowedRoles={['admin']} />}>
@@ -36,7 +37,7 @@ const App = () => {
 					<Route element={<PrivateRoute allowedRoles={['member']} />}>
 						<Route path='/user/dashboard' element={<UserDashboard />} />
 						<Route path='/user/tasks' element={<MyTasks />} />
-						<Route path='/user/tasks-details/:id' element={<ViewTaskDetails />} />
+						<Route path='/user/task-details/:id' element={<ViewTaskDetails />} />
 					</Route>
 
 					{/* Default Redirect */}
