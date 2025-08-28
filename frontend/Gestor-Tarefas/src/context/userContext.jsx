@@ -15,7 +15,7 @@ export const UserProvider = ({ children }) => {
 	};
 
 	useEffect(() => {
-		// Regista a função para que o axiosInstance possa limpá-la no 401
+		// Regista a função para limpar o user em caso de 401
 		registerClearUser(clearUser);
 
 		let isMounted = true;
@@ -29,6 +29,7 @@ export const UserProvider = ({ children }) => {
 				if (isMounted) setLoading(false);
 			}
 		};
+
 		fetchUser();
 
 		return () => {

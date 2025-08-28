@@ -85,8 +85,17 @@ const createTask = async (req, res) => {
 			return res.status(400).json({ message: 'O campo "title" é obrigatório e deve ser uma string.' });
 		}
 
-		if (!assignedTo || !Array.isArray(assignedTo) || assignedTo.length === 0) {
-			return res.status(400).json({ message: 'assignedTo deve ser um array com pelo menos um ID de utilizador.' });
+		let assignedUsers;
+
+		if (req.user.role === 'admin') {
+			// Admin precisa enviar assignedTo
+			if (!assignedTo || !Array.isArray(assignedTo) || assignedTo.length === 0) {
+				return res.status(400).json({ message: 'assignedTo deve ser um array com pelo menos um ID de utilizador.' });
+			}
+			assignedUsers = assignedTo;
+		} else {
+			// User normal → tarefa fica atribuída a ele próprio
+			assignedUsers = [req.user._id];
 		}
 
 		const task = await Task.create({
@@ -94,7 +103,7 @@ const createTask = async (req, res) => {
 			description,
 			priority,
 			dueDate: dueDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Default to one week from now
-			assignedTo,
+			assignedTo: assignedUsers,
 			createdBy: req.user._id, // Assuming req.user is populated with the authenticated user
 			todoChecklist,
 			attachments,
@@ -111,25 +120,40 @@ const createTask = async (req, res) => {
 // @access  Private(Admin)
 const updateTask = async (req, res) => {
 	try {
-		const task = await Task.findById(req.params.id);
-		if (!task) return res.status(404).json({ message: 'Task not found' });
+		const { id } = req.params;
+		const { title, description, priority, dueDate, status, assignedTo, attachments, todoChecklist } = req.body;
 
-		task.title = req.body.title || task.title;
-		task.description = req.body.description || task.description;
-		task.priority = req.body.priority || task.priority;
-		task.dueDate = req.body.dueDate || task.dueDate;
-		task.todoChecklist = req.body.todoChecklist || task.todoChecklist;
-		task.attachments = req.body.attachments || task.attachments;
-
-		if (req.body.assignedTo) {
-			if (!Array.isArray(req.body.assignedTo)) {
-				return res.status(400).json({ message: 'assignedTo must be an array of user IDs.' });
-			}
-			task.assignedTo = req.body.assignedTo;
+		let task = await Task.findById(id);
+		if (!task) {
+			return res.status(404).json({ message: 'Task not found' });
 		}
 
-		const updateTask = await task.save();
-		res.json({ message: 'Task updated successfully', updateTask });
+		// Se for user normal, só pode atualizar a sua própria tarefa
+		if (req.user.role !== 'admin' && !task.assignedTo.includes(req.user._id)) {
+			return res.status(403).json({ message: 'Not authorized to update this task' });
+		}
+
+		// Se for user normal → ignora assignedTo
+		let assignedUsers;
+		if (req.user.role === 'admin') {
+			assignedUsers = assignedTo && Array.isArray(assignedTo) && assignedTo.length > 0 ? assignedTo : task.assignedTo;
+		} else {
+			assignedUsers = [req.user._id];
+		}
+
+		// Atualizar campos
+		task.title = title || task.title;
+		task.description = description || task.description;
+		task.priority = priority || task.priority;
+		task.dueDate = dueDate || task.dueDate;
+		task.status = status || task.status;
+		task.assignedTo = assignedUsers;
+		task.attachments = attachments || task.attachments;
+		task.todoChecklist = todoChecklist || task.todoChecklist;
+
+		const updatedTask = await task.save();
+
+		res.status(200).json({ message: 'Task updated', task: updatedTask });
 	} catch (error) {
 		res.status(500).json({ message: 'Server error', error: error.message });
 	}

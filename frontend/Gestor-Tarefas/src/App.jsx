@@ -12,7 +12,7 @@ import Login from './pages/Auth/Login';
 import SignUp from './pages/Auth/SignUp';
 import PrivateRoute from './routes/PrivateRoute';
 
-import UserProvider, { UserContext } from './context/userContext';
+import UserProvider, { UserContext } from './context/UserContext';
 import { Toaster } from 'react-hot-toast';
 
 const App = () => {
@@ -23,7 +23,6 @@ const App = () => {
 					{/* Auth Routes */}
 					<Route path='/login' element={<Login />} />
 					<Route path='/signUp' element={<SignUp />} />
-					
 
 					{/* Admin Routes */}
 					<Route element={<PrivateRoute allowedRoles={['admin']} />}>
@@ -36,6 +35,7 @@ const App = () => {
 					{/* User Routes */}
 					<Route element={<PrivateRoute allowedRoles={['member']} />}>
 						<Route path='/user/dashboard' element={<UserDashboard />} />
+						<Route path='/user/create-task' element={<CreateTask />} />
 						<Route path='/user/tasks' element={<MyTasks />} />
 						<Route path='/user/task-details/:id' element={<ViewTaskDetails />} />
 					</Route>
@@ -45,11 +45,10 @@ const App = () => {
 				</Routes>
 
 				<Toaster
-					toastOptions={{ 
+					toastOptions={{
 						className: 'bg-gray-800 text-white',
 						style: {
 							fontSize: '13px',
-							
 						},
 					}}
 				/>

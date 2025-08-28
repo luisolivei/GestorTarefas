@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useContext, useState } from 'react';
-import { UserContext } from '../../context/userContext';
+import { UserContext } from '../../context/UserContext';
 import { SIDE_MENU_DATA, SIDE_MENU_USER_DATA } from '../../utils/data';
 
 const SideMenu = ({ activeMenu }) => {
 	const { user, clearUser } = useContext(UserContext);
-	const [ sideMenuData, setSideMenuData ] = useState([]);
+	const [sideMenuData, setSideMenuData] = useState([]);
 
 	const navigate = useNavigate();
 
@@ -30,7 +30,7 @@ const SideMenu = ({ activeMenu }) => {
 	};
 
 	useEffect(() => {
-		if(user) {
+		if (user) {
 			setSideMenuData(user?.role === 'admin' ? SIDE_MENU_DATA : SIDE_MENU_USER_DATA);
 		}
 		return () => {};
@@ -39,12 +39,7 @@ const SideMenu = ({ activeMenu }) => {
 		<div className='w-64 h-[calc(100vh-61px)] bg-white border-r border-gray-200/50 sticky top-[61px] z-20 '>
 			<div className='flex flex-col items-center justify-center mb-7 pt-5'>
 				<div className='relative'>
-					{user?.profileImageUrl ? (
-						<img src={user.profileImageUrl} alt={'Avatar'} className='w-12 h-12 rounded-full' />
-					) : (
-						<div className='w-12 h-12 rounded-full bg-gray-200 border-2 border-white' />
-					)}
-					
+					{user?.profileImageUrl ? <img src={user.profileImageUrl} alt={'Avatar'} className='w-12 h-12 rounded-full' /> : <div className='w-12 h-12 rounded-full bg-gray-200 border-2 border-white' />}
 				</div>
 
 				{user?.role === 'admin' && <div className='text-[10px] font-medium text-white bg-primary px-3 py-0.5 rounded mt-1'>Admin</div>}

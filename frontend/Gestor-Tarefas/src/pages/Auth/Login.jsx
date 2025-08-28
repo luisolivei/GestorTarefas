@@ -5,8 +5,7 @@ import { validateEmail } from '../../utils/helper';
 import AuthLayout from '../../components/layouts/AuthLayout';
 import axiosInstance from '../../utils/axiosInstance';
 import { API_PATHS } from '../../utils/apiPaths'; // Certifique-se de que o caminho está correto
-import { UserContext } from '../../context/userContext';
-
+import { UserContext } from '../../context/UserContext';
 
 const Login = () => {
 	// Estado para armazenar o email inserido pelo utilizador
@@ -16,7 +15,7 @@ const Login = () => {
 	// Estado para armazenar mensagens de erro
 	const [error, setError] = useState(null);
 
-	const {updateUser} = useContext(UserContext);
+	const { updateUser } = useContext(UserContext);
 
 	// Hook para navegar programaticamente entre rotas
 	const navigate = useNavigate();

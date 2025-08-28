@@ -48,6 +48,12 @@ export const SIDE_MENU_USER_DATA = [
         path: '/user/dashboard',
     },
     {
+        id: '03',
+        label: 'Create Tasks',
+        icon: LuSquarePlus,
+        path: '/user/create-task',
+    },
+    {
         id: '02',
         label: 'My Tasks',
         icon: LuClipboardCheck,
