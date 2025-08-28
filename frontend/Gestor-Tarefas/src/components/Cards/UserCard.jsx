@@ -1,12 +1,11 @@
-import React from 'react'
 
 const UserCard = ({userInfo}) => {
-  return (
+return (
 		<div className='user-card p-2'>
 			<div className='flex items-center justify-between'>
 				<div className='flex items-center gap-3'>
-                  {userInfo?.profileImageUrl ? (
-                      <img src={userInfo.profileImageUrl} alt={'Avatar'} className='w-12 h-12 rounded-full' />
+                {userInfo?.profileImageUrl ? (
+                    <img src={userInfo.profileImageUrl} alt={'Avatar'} className='w-12 h-12 rounded-full' />
 					) : (
 						<div className='w-12 h-12 rounded-full bg-gray-200 border-2 border-white' />
 					)}
@@ -18,22 +17,22 @@ const UserCard = ({userInfo}) => {
 				</div>
 			</div>
 
-          <div className='flex items-end gap-3 mt-5'>
-              <StatCard
-                  label="Pending"
-                  count={userInfo?.pendingTasks || 0}
-                  status="Pending"
-              />
-               <StatCard
-                  label="In Progress"
-                  count={userInfo?.inProgressTasks || 0}
-                  status="In progress"
-              />
-               <StatCard
-                  label="Completed"
-                  count={userInfo?.completedTasks || 0}
-                  status="Completed"
-              />
+        <div className='flex items-end gap-3 mt-5'>
+            <StatCard
+                label="Pending"
+                count={userInfo?.pendingTasks || 0}
+                status="Pending"
+            />
+            <StatCard
+                label="In Progress"
+                count={userInfo?.inProgressTasks || 0}
+                status="In progress"
+            />
+            <StatCard
+                label="Completed"
+                count={userInfo?.completedTasks || 0}
+                status="Completed"
+            />
             </div>
 		</div>
 	);
