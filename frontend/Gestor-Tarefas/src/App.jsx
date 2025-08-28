@@ -12,7 +12,8 @@ import Login from './pages/Auth/Login';
 import SignUp from './pages/Auth/SignUp';
 import PrivateRoute from './routes/PrivateRoute';
 
-import UserProvider, { UserContext } from './context/UserContext';
+import UserProvider from './context/UserProvider'; // default export do Provider
+import { UserContext } from './context/userContext'; // named export do Context
 import { Toaster } from 'react-hot-toast';
 
 const App = () => {
@@ -47,9 +48,7 @@ const App = () => {
 				<Toaster
 					toastOptions={{
 						className: 'bg-gray-800 text-white',
-						style: {
-							fontSize: '13px',
-						},
+						style: { fontSize: '13px' },
 					}}
 				/>
 			</UserProvider>
@@ -62,13 +61,8 @@ export default App;
 const RootRedirect = () => {
 	const { user, loading } = useContext(UserContext);
 
-	if (loading) {
-		return <p>A carregar...</p>;
-	}
-
-	if (!user) {
-		return <Navigate to='/login' replace />;
-	}
+	if (loading) return <p>A carregar...</p>;
+	if (!user) return <Navigate to='/login' replace />;
 
 	return <Navigate to={user.role === 'admin' ? '/admin/dashboard' : '/user/dashboard'} replace />;
 };

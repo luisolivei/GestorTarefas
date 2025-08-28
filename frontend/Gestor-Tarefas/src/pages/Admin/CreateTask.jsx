@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import DashboardLayout from '../../components/layouts/DashboardLayout';
 import { PRIORITY_DATA } from '../../utils/data';
 import axiosInstance from '../../utils/axiosInstance';
@@ -19,7 +19,7 @@ const CreateTask = () => {
 	const location = useLocation();
 	const { taskId } = location.state || {};
 	const navigate = useNavigate();
-	const { user} = useUserAuth(); // pega o user autenticado
+	const { user } = useUserAuth(); // pega o user autenticado
 
 	const [taskData, setTaskData] = useState({
 		title: '',
@@ -143,7 +143,7 @@ const CreateTask = () => {
 	};
 
 	// Get Task details by ID
-	const getTaskDetailsByID = async () => {
+	const getTaskDetailsByID = useCallback(async () => {
 		try {
 			const response = await axiosInstance.get(API_PATHS.TASKS.GET_TASK_BY_ID(taskId));
 			if (response.data) {
@@ -162,10 +162,10 @@ const CreateTask = () => {
 		} catch (error) {
 			console.error('Error fetching task details:', error);
 		}
-	};
+	}, [taskId]);
 
 	// Delete Task
-	const deleteTask = async () => {
+	const deleteTask = useCallback(async () => {
 		try {
 			await axiosInstance.delete(API_PATHS.TASKS.DELETE_TASK(taskId));
 			setOpenDeleteAlert(false);
@@ -174,11 +174,13 @@ const CreateTask = () => {
 		} catch (error) {
 			console.error('Error deleting task:', error.response?.data?.message || error.message);
 		}
-	};
+	}, [taskId, navigate]);
 
 	useEffect(() => {
-		if (taskId) getTaskDetailsByID();
-	}, [taskId]);
+		if (taskId) {
+			getTaskDetailsByID();
+		}
+	}, [taskId, getTaskDetailsByID]);
 
 	return (
 		<DashboardLayout activeMenu='Create Tasks'>

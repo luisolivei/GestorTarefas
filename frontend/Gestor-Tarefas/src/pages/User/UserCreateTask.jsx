@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import DashboardLayout from '../../components/layouts/DashboardLayout';
 import { PRIORITY_DATA } from '../../utils/data';
 import axiosInstance from '../../utils/axiosInstance';
@@ -46,7 +46,7 @@ const UserCreateTask = () => {
 			title: '',
 			description: '',
 			priority: 'Low',
-			dueDate: null,
+			dueDate: "",
 			todoChecklist: [],
 			attachments: [],
 		});
@@ -62,7 +62,7 @@ const UserCreateTask = () => {
 				completed: false,
 			}));
 
-			const response = await axiosInstance.post(API_PATHS.TASKS.CREATE_TASK, {
+			await axiosInstance.post(API_PATHS.TASKS.CREATE_TASK, {
 				...taskData,
 				dueDate: new Date(taskData.dueDate).toISOString(),
 				todoChecklist: todoList,
@@ -94,7 +94,7 @@ const UserCreateTask = () => {
 				};
 			});
 
-			const response = await axiosInstance.put(API_PATHS.TASKS.UPDATE_TASK(taskId), {
+			await axiosInstance.put(API_PATHS.TASKS.UPDATE_TASK(taskId), {
 				...taskData,
 				dueDate: new Date(taskData.dueDate).toISOString(),
 				todoChecklist: todoList,
@@ -140,26 +140,26 @@ const UserCreateTask = () => {
 	};
 
 	// get Task info by ID
-	const getTaskDetailsByID = async () => {
+	const getTaskDetailsByID = useCallback(async () => {
 		try {
 			const response = await axiosInstance.get(API_PATHS.TASKS.GET_TASK_BY_ID(taskId));
 
 			if (response.data) {
 				const taskInfo = response.data;
 				setCurrentTask(taskInfo);
-				setTaskData(prevState => ({
-					title: taskInfo.title,
-					description: taskInfo.description,
-					priority: taskInfo.priority,
-					dueDate: taskInfo.dueDate ? moment(taskInfo.dueDate).format('YYYY-MM-DD') : null,
+				setTaskData({
+					title: taskInfo.title || '',
+					description: taskInfo.description || '',
+					priority: taskInfo.priority || 'Low',
+					dueDate: taskInfo.dueDate ? moment(taskInfo.dueDate).format('YYYY-MM-DD') : "",
 					todoChecklist: taskInfo?.todoChecklist?.map(item => item?.task) || [],
 					attachments: taskInfo?.attachments || [],
-				}));
+				});
 			}
 		} catch (error) {
 			console.error('Error fetching task details:', error);
 		}
-	};
+	}, [taskId]);
 
 	// Delete Task
 	const deleteTask = async () => {
@@ -180,7 +180,7 @@ const UserCreateTask = () => {
 		}
 
 		return () => {};
-	}, [taskId]);
+	}, [taskId, getTaskDetailsByID]);
 
 	return (
 		<DashboardLayout activeMenu='Create Tasks'>
@@ -200,11 +200,11 @@ const UserCreateTask = () => {
 						</div>
 						<div className='mt-4'>
 							<label className='text-sx font-medium text-slate-600'>Task Title</label>
-							<input placeholder='Create App UI' className='form-input' value={taskData.title} onChange={({ target }) => handleValueChange('title', target.value)} />
+							<input placeholder='Create App UI' className='form-input' value={taskData.title || ''} onChange={({ target }) => handleValueChange('title', target.value)} />
 						</div>
 						<div className='mt-3'>
 							<label className='text-xs font-medium text-slate-600'>Description</label>
-							<textarea placeholder='Describe Task' className='form-input' rows={4} value={taskData.description} onChange={({ target }) => handleValueChange('description', target.value)} />
+							<textarea placeholder='Describe Task' className='form-input' rows={4} value={taskData.description || ''} onChange={({ target }) => handleValueChange('description', target.value)} />
 						</div>
 
 						<div className='grid grid-cols-12 gap-4 mt-2'>
@@ -217,7 +217,7 @@ const UserCreateTask = () => {
 							<div className='col-span-6 md:col-span-4'>
 								<label className='text-xs font-medium text-slate-600'>Due Date</label>
 
-								<input placeholder='Create App UI' className='form-input' value={taskData.dueDate} onChange={({ target }) => handleValueChange('dueDate', target.value)} type='date' />
+								<input placeholder='Create App UI' className='form-input' value={taskData.dueDate || ''} onChange={({ target }) => handleValueChange('dueDate', target.value)} type='date' />
 							</div>
 						</div>
 
