@@ -16,19 +16,21 @@ import CustomBarChart from '../../components/Charts/CustomBarChart';
 const COLORS = ['#8D51FF', '#00B8DB', '#7BCE00'];
 
 const Dashboard = () => {
-	useUserAuth();
+	useUserAuth(); // garante que o utilizador está autenticado
 	const { user } = useContext(UserContext);
 
 	const navigate = useNavigate();
 
-	const [dashboardData, setDashboardData] = useState(null);
-	const [pieChartData, setPieChartData] = useState([]);
-	const [barChartData, setBarChartData] = useState([]);
+	const [dashboardData, setDashboardData] = useState(null); // dados gerais do dashboard
+	const [pieChartData, setPieChartData] = useState([]); // dados para gráfico circular
+	const [barChartData, setBarChartData] = useState([]); // dados para gráfico de barras
 
+	// Prepara os dados para os gráficos
 	const prepareChartData = data => {
-		const taskDistribution = data?.taskDistribution || null;
-		const taskPriorityLevels = data?.taskPriorityLevels || null;
+		const taskDistribution = data?.taskDistribution || null; // distribuição de tarefas por estado
+		const taskPriorityLevels = data?.taskPriorityLevels || null; // níveis de prioridade das tarefas
 
+		// Dados para o gráfico circular (estado das tarefas)
 		const taskDistributionData = [
 			{ status: 'Pending', count: taskDistribution?.Pending || 0 },
 			{ status: 'In Progress', count: taskDistribution?.InProgress || 0 },
@@ -37,6 +39,7 @@ const Dashboard = () => {
 
 		setPieChartData(taskDistributionData);
 
+		// Dados para o gráfico de barras (prioridade das tarefas)
 		const PriorityLevelData = [
 			{ priority: 'Low', count: taskPriorityLevels?.Low || 0 },
 			{ priority: 'Medium', count: taskPriorityLevels?.Medium || 0 },
@@ -46,6 +49,7 @@ const Dashboard = () => {
 		setBarChartData(PriorityLevelData);
 	};
 
+	// Obter dados do dashboard através da API
 	const getDashboardData = async () => {
 		try {
 			const response = await axiosInstance.get(API_PATHS.TASKS.GET_DASHBOARD_DATA);
@@ -54,16 +58,16 @@ const Dashboard = () => {
 				prepareChartData(response.data?.charts || null);
 			}
 		} catch (error) {
-			console.error('Error fetching dashboard data:', error);
+			console.error('Erro ao obter dados do dashboard:', error);
 		}
 	};
 
 	const onSeeMore = () => {
-		navigate('/admin/tasks');
+		navigate('/admin/tasks'); // navegar para página com todas as tarefas
 	};
 
 	useEffect(() => {
-		getDashboardData();
+		getDashboardData(); // carrega dados ao montar componente
 		return () => {};
 	}, []);
 
@@ -77,8 +81,8 @@ const Dashboard = () => {
 					</div>
 				</div>
 				<div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mt-5'>
+					{/* Cartões informativos */}
 					<InfoCard label='Total Tasks' value={addThousandsSeparator(dashboardData?.charts?.taskDistribution?.All || 0)} color='bg-primary' />
-
 					<InfoCard label='Pending Tasks' value={addThousandsSeparator(dashboardData?.charts?.taskDistribution?.Pending || 0)} color='bg-violet-500' />
 					<InfoCard label='In Progress' value={addThousandsSeparator(dashboardData?.charts?.taskDistribution?.InProgress || 0)} color='bg-cyan-500' />
 					<InfoCard label='Completed Tasks' value={addThousandsSeparator(dashboardData?.charts?.taskDistribution?.Completed || 0)} color='bg-lime-500' />
@@ -89,9 +93,9 @@ const Dashboard = () => {
 				<div>
 					<div className='card'>
 						<div className='flex items-center justify-between'>
-							<h5 className='font-medium'>Task Distribution</h5>
+							<h5 className='font-medium'>Distribuição de Tarefas</h5>
 						</div>
-
+						{/* Gráfico circular */}
 						<CustomPieChart data={pieChartData} colors={COLORS} />
 					</div>
 				</div>
@@ -99,9 +103,9 @@ const Dashboard = () => {
 				<div>
 					<div className='card'>
 						<div className='flex items-center justify-between'>
-							<h5 className='font-medium'>Task Priority Levels</h5>
+							<h5 className='font-medium'>Níveis de Prioridade da Tarefa</h5>
 						</div>
-
+						{/* Gráfico de barras */}
 						<CustomBarChart data={barChartData} />
 					</div>
 				</div>
@@ -109,11 +113,13 @@ const Dashboard = () => {
 				<div className='md:col-span-2'>
 					<div className='card'>
 						<div className='flex items-center justify-between'>
-							<h5 className='text-lg'>Recent Tasks</h5>
+							<h5 className='text-lg'>Tarefas Recentes</h5>
+							{/* Botão para ver todas as tarefas */}
 							<button className='card-btn' onClick={onSeeMore}>
-								See All <LuArrowRight className='text-base' />
+								Ver Todas <LuArrowRight className='text-base' />
 							</button>
 						</div>
+						{/* Tabela com as tarefas recentes */}
 						<TaskListTable tableData={dashboardData?.recentTasks || []} />
 					</div>
 				</div>

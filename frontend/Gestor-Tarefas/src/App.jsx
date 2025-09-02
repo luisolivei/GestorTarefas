@@ -12,20 +12,21 @@ import Login from './pages/Auth/Login';
 import SignUp from './pages/Auth/SignUp';
 import PrivateRoute from './routes/PrivateRoute';
 
-import UserProvider from './context/UserProvider'; // default export do Provider
-import { UserContext } from './context/userContext'; // named export do Context
+import UserProvider from './context/UserProvider'; // Provider do utilizador (estado global)
+import { UserContext } from './context/UserContext'; // Contexto do utilizador
 import { Toaster } from 'react-hot-toast';
 
 const App = () => {
 	return (
 		<Router>
+			{/* Envolve toda a app com o UserProvider para disponibilizar o estado global */}
 			<UserProvider>
 				<Routes>
-					{/* Auth Routes */}
+					{/* Rotas de autenticação */}
 					<Route path='/login' element={<Login />} />
 					<Route path='/signUp' element={<SignUp />} />
 
-					{/* Admin Routes */}
+					{/* Rotas de administrador - acessíveis apenas a utilizadores com role 'admin' */}
 					<Route element={<PrivateRoute allowedRoles={['admin']} />}>
 						<Route path='/admin/dashboard' element={<Dashboard />} />
 						<Route path='/admin/tasks' element={<ManageTasks />} />
@@ -33,7 +34,7 @@ const App = () => {
 						<Route path='/admin/users' element={<ManageUsers />} />
 					</Route>
 
-					{/* User Routes */}
+					{/* Rotas de membro - acessíveis apenas a utilizadores com role 'member' */}
 					<Route element={<PrivateRoute allowedRoles={['member']} />}>
 						<Route path='/user/dashboard' element={<UserDashboard />} />
 						<Route path='/user/create-task' element={<CreateTask />} />
@@ -41,10 +42,11 @@ const App = () => {
 						<Route path='/user/task-details/:id' element={<ViewTaskDetails />} />
 					</Route>
 
-					{/* Default Redirect */}
+					{/* Redirecionamento padrão */}
 					<Route path='/*' element={<RootRedirect />} />
 				</Routes>
 
+				{/* Componente para notificações/toasts */}
 				<Toaster
 					toastOptions={{
 						className: 'bg-gray-800 text-white',
@@ -58,11 +60,13 @@ const App = () => {
 
 export default App;
 
+// Componente para redirecionamento baseado no estado do utilizador
 const RootRedirect = () => {
 	const { user, loading } = useContext(UserContext);
 
-	if (loading) return <p>A carregar...</p>;
-	if (!user) return <Navigate to='/login' replace />;
+	if (loading) return <p>A carregar...</p>; // Mostra enquanto carrega os dados do utilizador
+	if (!user) return <Navigate to='/login' replace />; // Se não houver utilizador, redireciona para login
 
+	// Redireciona com base no role do utilizador
 	return <Navigate to={user.role === 'admin' ? '/admin/dashboard' : '/user/dashboard'} replace />;
 };

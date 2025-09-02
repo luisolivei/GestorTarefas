@@ -1,24 +1,38 @@
 const mongoose = require('mongoose');
 
+// Esquema para cada item da checklist de uma tarefa
 const todoSchema = new mongoose.Schema({
-	task: { type: String, required: true },
-	completed: { type: Boolean, default: false },
+	task: { type: String, required: true }, // Descrição da tarefa da checklist
+	completed: { type: Boolean, default: false }, // Estado de conclusão (true/false)
 });
-// Defenir o esquema da tarefa
+
+// Esquema principal da tarefa
 const taskSchema = new mongoose.Schema(
 	{
-		title: { type: String, required: true },
-		description: { type: String },
-		priority: { type: String, enum: ['Low', 'Medium', 'High'], default: 'Medium' },
-		status: { type: String, enum: ['Pending', 'In Progress', 'Completed'], default: 'Pending' },
-		dueDate: { type: Date, default: () => new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) }, // Default to one week from now
-		assignedTo: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-		createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-		attachments: [{ type: String }],
-		todoChecklist: [todoSchema],
-		progress: { type: Number, default: 0 },
+		title: { type: String, required: true }, // Título da tarefa
+		description: { type: String }, // Descrição detalhada da tarefa
+		priority: {
+			type: String,
+			enum: ['Low', 'Medium', 'High'], // Apenas valores permitidos
+			default: 'Medium', // Valor por defeito
+		},
+		status: {
+			type: String,
+			enum: ['Pending', 'In Progress', 'Completed'],
+			default: 'Pending', // Estado inicial da tarefa
+		},
+		dueDate: {
+			type: Date,
+			default: () => new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Prazo por defeito: 1 semana
+		},
+		assignedTo: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // IDs de utilizadores atribuídos
+		createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // ID do utilizador que criou a tarefa
+		attachments: [{ type: String }], // Lista de URLs de anexos
+		todoChecklist: [todoSchema], // Checklist de subtarefas
+		progress: { type: Number, default: 0 }, // Percentagem de progresso da tarefa
 	},
-	{ timestamps: true },
+	{ timestamps: true }, // Adiciona automaticamente campos createdAt e updatedAt
 );
-// Criar o modelo da tarefa
+
+// Criar o modelo da tarefa com base no esquema
 module.exports = mongoose.model('Task', taskSchema);

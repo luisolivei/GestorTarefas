@@ -150,15 +150,25 @@ const updateUserProfile = async (req, res) => {
 // @desc Logout prefil do usuário
 // @route post /api/auth/logout
 
+// Função para efetuar logout do utilizador
 const logoutUser = (req, res) => {
+	// Define o cookie 'token' como vazio e com expiração imediata
 	res.cookie('token', '', {
-		httpOnly: true,
-		expires: new Date(0), // Expira imediatamente
-		sameSite: 'Strict',
-		secure: process.env.NODE_ENV === 'production',
+		httpOnly: true, // Impede que o cookie seja acedido via JavaScript no navegador
+		expires: new Date(0), // Faz o cookie expirar imediatamente
+		sameSite: 'Strict', // Evita envio do cookie em pedidos cross-site
+		secure: process.env.NODE_ENV === 'production', // Apenas em HTTPS em produção
 	});
+	
+	// Envia uma resposta de sucesso para o cliente
 	res.status(200).json({ message: 'Logout' });
 };
 
-
-module.exports = { registerUser, loginUser, getUserProfile, updateUserProfile, logoutUser };
+// Exporta todas as funções relacionadas com utilizadores para serem usadas noutros módulos
+module.exports = { 
+	registerUser,        // Função para registar um novo utilizador
+	loginUser,           // Função para autenticar um utilizador
+	getUserProfile,      // Função para obter o perfil do utilizador
+	updateUserProfile,   // Função para atualizar o perfil do utilizador
+	logoutUser           // Função para efetuar logout
+};

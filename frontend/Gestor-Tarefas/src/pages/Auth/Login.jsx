@@ -10,9 +10,9 @@ import { UserContext } from '../../context/UserContext';
 const Login = () => {
 	// Estado para armazenar o email inserido pelo utilizador
 	const [email, setEmail] = useState('');
-	// Estado para armazenar a password inserida
+	// Estado para armazenar a palavra-passe inserida
 	const [password, setPassword] = useState('');
-	// Estado para armazenar mensagens de erro
+	// Estado para mensagens de erro
 	const [error, setError] = useState(null);
 
 	const { updateUser } = useContext(UserContext);
@@ -20,15 +20,17 @@ const Login = () => {
 	// Hook para navegar programaticamente entre rotas
 	const navigate = useNavigate();
 
-	// Função para lidar com o envio do formulário de login
+	// Função para processar o envio do formulário de login
 	const handleLogin = async e => {
 		e.preventDefault();
 
+		// Valida o email
 		if (!validateEmail(email)) {
 			setError('Por favor, insira um email válido.');
 			return;
 		}
 
+		// Valida a password
 		if (!password) {
 			setError('Por favor, insira uma senha.');
 			return;
@@ -37,28 +39,29 @@ const Login = () => {
 		setError('');
 
 		try {
-			// Fazer login — cookie HttpOnly definido automaticamente
+			// Efetuar login — cookie HttpOnly definido automaticamente
 			const loginResponse = await axiosInstance.post(API_PATHS.AUTH.LOGIN, { email, password });
 
-			// Se a API de login já devolve o user, usa direto
+			// Obter dados do utilizador diretamente da API de login
 			let userData = loginResponse.data?.user;
 
-			// Caso contrário, busca o perfil
+			// Se não retornar, buscar perfil do utilizador
 			if (!userData) {
 				const profileResponse = await axiosInstance.get(API_PATHS.AUTH.GET_PROFILE);
 				userData = profileResponse.data;
 			}
 
-			// Atualiza o estado global
+			// Atualiza o estado global com os dados do utilizador
 			updateUser(userData);
 
-			// Redireciona com base no role
+			// Redireciona consoante o role do utilizador
 			if (userData.role === 'admin') {
 				navigate('/admin/dashboard');
 			} else {
 				navigate('/user/dashboard');
 			}
 		} catch (error) {
+			// Mensagem de erro específica da API ou genérica
 			if (error.response?.data?.message) {
 				setError(error.response.data.message);
 			} else {
@@ -77,7 +80,7 @@ const Login = () => {
 					{/* Campo de email */}
 					<Input value={email} onChange={({ target }) => setEmail(target.value)} label='Email' placeholder='john@example.com' type='text' />
 
-					{/* Campo de password */}
+					{/* Campo de palavra-passe */}
 					<Input value={password} onChange={({ target }) => setPassword(target.value)} label='Palavra-passe' placeholder='Mínimo 6 caracteres' type='password' />
 
 					{/* Mensagem de erro, se existir */}
@@ -88,7 +91,7 @@ const Login = () => {
 						Login
 					</button>
 
-					{/* Link para a página de registo */}
+					{/* Link para página de registo */}
 					<p className='text-[13px] text-slate-800 mt-3'>
 						Não tens conta?{' '}
 						<Link className='font-semibold text-[13px] text-primary underline' to='/signup'>

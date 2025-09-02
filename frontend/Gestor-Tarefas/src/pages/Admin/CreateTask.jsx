@@ -13,29 +13,30 @@ import TodoListInput from '../../components/Inputs/TodoListInput';
 import AddAttachmentsInput from '../../components/Inputs/AddAttachmentsInput';
 import Modal from '../../components/Modal';
 import DeleteAlert from '../../components/DeleteAlert';
-import { useUserAuth } from '../../hooks/useUserAuth'; // exemplo de hook para user
+import { useUserAuth } from '../../hooks/useUserAuth'; // Hook para obter o utilizador autenticado
 
 const CreateTask = () => {
 	const location = useLocation();
-	const { taskId } = location.state || {};
+	const { taskId } = location.state || {}; // obtém o taskId se existir (para edição)
 	const navigate = useNavigate();
-	const { user } = useUserAuth(); // pega o user autenticado
+	const { user } = useUserAuth(); // obtém o utilizador autenticado
 
 	const [taskData, setTaskData] = useState({
-		title: '',
-		description: '',
-		priority: 'Low',
-		dueDate: '',
-		assignedTo: [],
-		todoChecklist: [],
-		attachments: [],
+		title: '', // título da task
+		description: '', // descrição da task
+		priority: 'Low', // prioridade inicial
+		dueDate: '', // data de entrega
+		assignedTo: [], // utilizadores atribuídos
+		todoChecklist: [], // checklist de subtarefas
+		attachments: [], // anexos
 	});
 
-	const [currentTask, setCurrentTask] = useState(null);
-	const [error, setError] = useState('');
-	const [loading, setLoading] = useState(false);
-	const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
+	const [currentTask, setCurrentTask] = useState(null); // dados da task atual (para edição)
+	const [error, setError] = useState(''); // mensagem de erro do formulário
+	const [loading, setLoading] = useState(false); // estado de loading
+	const [openDeleteAlert, setOpenDeleteAlert] = useState(false); // modal de confirmação de eliminação
 
+	// Função para atualizar os valores do formulário
 	const handleValueChange = (key, value) => {
 		setTaskData(prevData => ({
 			...prevData,
@@ -43,6 +44,7 @@ const CreateTask = () => {
 		}));
 	};
 
+	// Limpa os dados do formulário
 	const clearData = () => {
 		setTaskData({
 			title: '',
@@ -55,7 +57,7 @@ const CreateTask = () => {
 		});
 	};
 
-	// Create Task
+	// Criar uma nova task
 	const createTask = async () => {
 		setLoading(true);
 		try {
@@ -70,17 +72,17 @@ const CreateTask = () => {
 				todoChecklist: todoList,
 			});
 
-			toast.success('Task created successfully!');
-			clearData();
+			toast.success('Task criada com sucesso!');
+			clearData(); // limpa o formulário após criar a task
 		} catch (error) {
-			console.error('Error creating task:', error);
+			console.error('Erro ao criar task:', error);
 			setLoading(false);
 		} finally {
 			setLoading(false);
 		}
 	};
 
-	// Update Task
+	// Atualizar uma task existente
 	const updateTask = async () => {
 		setLoading(true);
 		try {
@@ -89,7 +91,7 @@ const CreateTask = () => {
 				const matchedTask = prevTodoChecklist.find(task => task.task == item);
 				return {
 					task: item,
-					completed: matchedTask ? matchedTask.completed : false,
+					completed: matchedTask ? matchedTask.completed : false, // mantém estado das subtarefas existentes
 				};
 			});
 
@@ -99,50 +101,54 @@ const CreateTask = () => {
 				todoChecklist: todoList,
 			});
 
-			toast.success('Task updated successfully!');
+			toast.success('Task atualizada com sucesso!');
 		} catch (error) {
-			console.error('Error updating task:', error);
+			console.error('Erro ao atualizar task:', error);
 			setLoading(false);
 		} finally {
 			setLoading(false);
 		}
 	};
 
+	// Submeter formulário: valida e cria ou atualiza task
 	const handleSubmit = async () => {
 		setError(null);
 
+		// validações do formulário
 		if (!taskData.title.trim()) {
-			setError('Task title is required.');
+			setError('O título da task é obrigatório.');
 			return;
 		}
 		if (!taskData.description.trim()) {
-			setError('Task description is required.');
+			setError('A descrição da task é obrigatória.');
 			return;
 		}
 		if (!taskData.dueDate) {
-			setError('Due date is required.');
+			setError('A data de entrega é obrigatória.');
 			return;
 		}
 
+		// apenas admins devem atribuir a utilizadores
 		if (user?.role === 'admin' && taskData.assignedTo?.length === 0) {
-			setError('Task not assigned to any member.');
+			setError('A task não foi atribuída a nenhum membro.');
 			return;
 		}
 
+		// valida checklist
 		if (taskData.todoChecklist?.length === 0) {
-			setError('Task must have at least one TODO item.');
+			setError('A task deve ter pelo menos um item TODO.');
 			return;
 		}
 
 		if (taskId) {
-			updateTask();
+			updateTask(); // se existir taskId, atualiza
 			return;
 		}
 
-		createTask();
+		createTask(); // caso contrário, cria nova task
 	};
 
-	// Get Task details by ID
+	// Obter detalhes da task pelo ID
 	const getTaskDetailsByID = useCallback(async () => {
 		try {
 			const response = await axiosInstance.get(API_PATHS.TASKS.GET_TASK_BY_ID(taskId));
@@ -160,25 +166,25 @@ const CreateTask = () => {
 				});
 			}
 		} catch (error) {
-			console.error('Error fetching task details:', error);
+			console.error('Erro ao obter detalhes da task:', error);
 		}
 	}, [taskId]);
 
-	// Delete Task
+	// Eliminar task
 	const deleteTask = useCallback(async () => {
 		try {
 			await axiosInstance.delete(API_PATHS.TASKS.DELETE_TASK(taskId));
-			setOpenDeleteAlert(false);
-			toast.success('Task deleted successfully!');
-			navigate('/admin/tasks');
+			setOpenDeleteAlert(false); // fecha modal de confirmação
+			toast.success('Task eliminada com sucesso!');
+			navigate('/admin/tasks'); // redireciona para lista de tasks
 		} catch (error) {
-			console.error('Error deleting task:', error.response?.data?.message || error.message);
+			console.error('Erro ao eliminar task:', error.response?.data?.message || error.message);
 		}
 	}, [taskId, navigate]);
 
 	useEffect(() => {
 		if (taskId) {
-			getTaskDetailsByID();
+			getTaskDetailsByID(); // se houver taskId, carrega dados da task para edição
 		}
 	}, [taskId, getTaskDetailsByID]);
 
@@ -188,70 +194,72 @@ const CreateTask = () => {
 				<div className='grid grid-cols-1 md:grid-cols-4 mt-4'>
 					<div className='form-card col-span-3'>
 						<div className='flex items-center justify-between'>
-							<h2 className='text-xl md:text-xl font-medium'>{taskId ? 'Update Task' : 'Create Task'}</h2>
+							<h2 className='text-xl md:text-xl font-medium'>{taskId ? 'Atualizar Task' : 'Criar Task'}</h2>
 							{taskId && (
 								<button
 									className='flex items-center gap-1.5 text-[13px] font-medium text-rose-500 bg-rose-50 rounded px-2 py-1 border border-rose-100 hover:bg-rose-300 cursor-pointer:'
-									onClick={() => setOpenDeleteAlert(true)}
+									onClick={() => setOpenDeleteAlert(true)} // abre modal de confirmação de eliminação
 								>
-									<LuTrash2 className='text-base' /> Delete
+									<LuTrash2 className='text-base' /> Apagar
 								</button>
 							)}
 						</div>
 
 						<div className='mt-4'>
-							<label className='text-sx font-medium text-slate-600'>Task Title</label>
-							<input placeholder='Create App UI' className='form-input' value={taskData.title} onChange={({ target }) => handleValueChange('title', target.value)} />
+							<label className='text-sx font-medium text-slate-600'>Título</label>
+							<input placeholder='Criar App UI' className='form-input' value={taskData.title} onChange={({ target }) => handleValueChange('title', target.value)} />
 						</div>
 
 						<div className='mt-3'>
-							<label className='text-xs font-medium text-slate-600'>Description</label>
-							<textarea placeholder='Describe Task' className='form-input' rows={4} value={taskData.description} onChange={({ target }) => handleValueChange('description', target.value)} />
+							<label className='text-xs font-medium text-slate-600'>Descrição</label>
+							<textarea placeholder='Descreve a Task' className='form-input' rows={4} value={taskData.description} onChange={({ target }) => handleValueChange('description', target.value)} />
 						</div>
 
 						<div className='grid grid-cols-12 gap-4 mt-2'>
 							<div className='col-span-6 md:col-span-4'>
-								<label className='text-xs font-medium text-slate-600'>Priority</label>
-								<SelectDropdown options={PRIORITY_DATA} value={taskData.priority} onChange={value => handleValueChange('priority', value)} placeholder='Select Priority' />
+								<label className='text-xs font-medium text-slate-600'>Prioridade</label>
+								<SelectDropdown options={PRIORITY_DATA} value={taskData.priority} onChange={value => handleValueChange('priority', value)} placeholder='Selecionar Prioridade' />
 							</div>
 
 							<div className='col-span-6 md:col-span-4'>
-								<label className='text-xs font-medium text-slate-600'>Due Date</label>
+								<label className='text-xs font-medium text-slate-600'>Prazo de Entrega</label>
 								<input className='form-input' value={taskData.dueDate} onChange={({ target }) => handleValueChange('dueDate', target.value)} type='date' />
 							</div>
 
-							{/* Render Assign To only for admins */}
+							{/* Renderizar "Atribuido a" apenas para admins */}
 							{user?.role === 'admin' && (
 								<div className='col-span-12 md:col-span-3'>
-									<label className='text-xs font-medium text-slate-600'>Assign To</label>
+									<label className='text-xs font-medium text-slate-600'>Atribuído a</label>
 									<SelectUsers selectedUsers={taskData.assignedTo} setSelectedUsers={value => handleValueChange('assignedTo', value)} />
 								</div>
 							)}
 						</div>
 
 						<div className='mt-3'>
-							<label className='text-xs font-medium text-slate-600'>TODO Checklist</label>
+							<label className='text-xs font-medium text-slate-600'>Checklist de Tarefas</label>
 							<TodoListInput todoList={taskData?.todoChecklist} setTodoList={value => handleValueChange('todoChecklist', value)} />
 						</div>
 
 						<div className='mt-3'>
-							<label className='text-xs font-medium text-slate-600'>Add Attachments</label>
+							<label className='text-xs font-medium text-slate-600'>Inserir Anexos</label>
 							<AddAttachmentsInput attachments={taskData?.attachments} setAttachments={value => handleValueChange('attachments', value)} />
 						</div>
 
+						{/* Mensagem de erro */}
 						{error && <p className='text-xs font-medium text-red-500 mt-5'>{error}</p>}
 
 						<div className='flex justify-end mt-7'>
 							<button className='add-btn' onClick={handleSubmit} disabled={loading}>
-								{taskId ? 'UPDATE' : 'CREATE TASK'}
+								{taskId ? 'ATUALIZAR' : 'CRIAR TASK'}
 							</button>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<Modal isOpen={openDeleteAlert} onClose={() => setOpenDeleteAlert(false)} title='Delete Task'>
-				<DeleteAlert content='Are you sure you want to delete this task?' onDelete={() => deleteTask()} />
+			{/* Modal para confirmar eliminação da task */}
+			<Modal isOpen={openDeleteAlert} onClose={() => setOpenDeleteAlert(false)} title='Eliminar Task'>
+				<DeleteAlert content='Tem a certeza que pretende eliminar esta task?' onDelete={() => deleteTask()} />
 			</Modal>
 		</DashboardLayout>
 	);

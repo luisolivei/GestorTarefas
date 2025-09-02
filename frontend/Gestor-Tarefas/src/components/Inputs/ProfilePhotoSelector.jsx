@@ -1,6 +1,11 @@
 import { useState, useRef } from 'react';
 import { LuUser, LuUpload, LuTrash } from 'react-icons/lu';
 
+// Componente para seleção e pré-visualização da foto de perfil
+// Props:
+//   - image    → ficheiro de imagem selecionado
+//   - setImage → função para atualizar a imagem selecionada
+
 const ProfilePhotoSelector = ({ image, setImage }) => {
 	const inputRef = useRef(null);
 	const [previewUrl, setPreviewUrl] = useState(null);

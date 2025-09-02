@@ -1,5 +1,13 @@
 import { useState } from 'react';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
+
+// Componente Input personalizado
+// Props:
+//   - value       → valor atual do input
+//   - onChange    → função para atualizar o valor
+//   - label       → rótulo do campo
+//   - placeholder → texto de sugestão dentro do input
+//   - type        → tipo do input (ex.: 'text', 'password', 'email', etc.)
 const Input = ({ value, onChange, label, placeholder, type }) => {
 	// Estado para controlar se a password está visível ou não
 	const [showPassword, setShowPassword] = useState(false);
@@ -24,7 +32,7 @@ const Input = ({ value, onChange, label, placeholder, type }) => {
 					onChange={e => onChange(e)} // Chamada da função de alteração passada como prop
 				/>
 
-				{/* Se o tipo for 'password', mostra o ícone para alternar visibilidade */}
+				{/* Ícones para mostrar/ocultar password, apenas se o tipo for 'password' */}
 				{type === 'password' && (
 					<>
 						{showPassword ? (
