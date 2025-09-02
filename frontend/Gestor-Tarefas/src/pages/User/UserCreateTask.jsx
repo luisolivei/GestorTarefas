@@ -71,7 +71,7 @@ const UserCreateTask = () => {
 				todoChecklist: todoList,
 			});
 
-			toast.success('Task created successfully!'); // Notificação de sucesso
+			toast.success('Tarefa criada com sucesso!'); // Notificação de sucesso
 			clearData(); // Limpar formulário
 		} catch (error) {
 			console.error('Erro ao criar tarefa:', error);
@@ -104,7 +104,7 @@ const UserCreateTask = () => {
 				todoChecklist: todoList,
 			});
 
-			toast.success('Task updated successfully!');
+			toast.success('Tarefa atualizada com sucesso!');
 		} catch (error) {
 			console.error('Erro ao atualizar tarefa:', error);
 			setLoading(false);
@@ -171,7 +171,7 @@ const UserCreateTask = () => {
 			await axiosInstance.delete(API_PATHS.TASKS.DELETE_TASK(taskId));
 
 			setOpenDeleteAlert(false);
-			toast.success('Task deleted successfully!');
+			toast.success('Tarefa apagada com sucesso!');
 			navigate('/user/tasks'); // Redireciona após apagar
 		} catch (error) {
 			console.error('Erro ao apagar tarefa:', error.response?.data?.message || error.message);
@@ -187,13 +187,13 @@ const UserCreateTask = () => {
 	}, [taskId, getTaskDetailsByID]);
 
 	return (
-		<DashboardLayout activeMenu='Create Tasks'>
+		<DashboardLayout activeMenu='Criar Tarefa'>
 			<div className='mt-5'>
 				<div className='grid grid-cols-1 md:grid-cols-4 mt-4'>
 					{/* Formulário da tarefa */}
 					<div className='form-card col-span-3'>
 						<div className='flex items-center justify-between'>
-							<h2 className='text-xl md:text-xl font-medium'>{taskId ? 'Update Task' : 'Create Task'}</h2>
+							<h2 className='text-xl md:text-xl font-medium'>{taskId ? 'Update Tarefa' : 'Criar Tarefa'}</h2>
 
 							{/* Botão para apagar tarefa (apenas se estivermos em edição) */}
 							{taskId && (
@@ -209,19 +209,19 @@ const UserCreateTask = () => {
 						{/* Campos do formulário */}
 						<div className='mt-4'>
 							<label className='text-sx font-medium text-slate-600'>Título </label>
-							<input placeholder='Create App UI' className='form-input' value={taskData.title || ''} onChange={({ target }) => handleValueChange('title', target.value)} />
+							<input placeholder='Insere Título' className='form-input' value={taskData.title || ''} onChange={({ target }) => handleValueChange('title', target.value)} />
 						</div>
 
 						<div className='mt-3'>
 							<label className='text-xs font-medium text-slate-600'>Descrição</label>
-							<textarea placeholder='Describe Task' className='form-input' rows={4} value={taskData.description || ''} onChange={({ target }) => handleValueChange('description', target.value)} />
+							<textarea placeholder='Descrição da tarefa' className='form-input' rows={4} value={taskData.description || ''} onChange={({ target }) => handleValueChange('description', target.value)} />
 						</div>
 
 						<div className='grid grid-cols-12 gap-4 mt-2'>
 							{/* Dropdown de prioridade */}
 							<div className='col-span-6 md:col-span-4'>
 								<label className='text-xs font-medium text-slate-600'>Prioridade</label>
-								<SelectDropdown options={PRIORITY_DATA} value={taskData.priority} onChange={value => handleValueChange('priority', value)} placeholder='Select Priority' />
+								<SelectDropdown options={PRIORITY_DATA} value={taskData.priority} onChange={value => handleValueChange('priority', value)} placeholder='Seleciona Prioridade' />
 							</div>
 
 							{/* Input de data de entrega */}
@@ -249,7 +249,7 @@ const UserCreateTask = () => {
 						{/* Botão de submissão */}
 						<div className='flex justify-end mt-7'>
 							<button className='add-btn' onClick={handleSubmit} disabled={loading}>
-								{taskId ? 'UPDATE' : 'CREATE TASK'}
+								{taskId ? 'UPDATE' : 'Criar Tarefa'}
 							</button>
 						</div>
 					</div>
@@ -257,8 +257,8 @@ const UserCreateTask = () => {
 			</div>
 
 			{/* Modal de confirmação de delete */}
-			<Modal isOpen={openDeleteAlert} onClose={() => setOpenDeleteAlert(false)} title='Delete Task'>
-				<DeleteAlert content='Are you sure you want to delete this task?' onDelete={() => deleteTask()} />
+			<Modal isOpen={openDeleteAlert} onClose={() => setOpenDeleteAlert(false)} title='Apagar Tarefa'>
+				<DeleteAlert content='Tem certeza que deseja apagar essa tarefa?' onDelete={() => deleteTask()} />
 			</Modal>
 		</DashboardLayout>
 	);

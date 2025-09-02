@@ -56,7 +56,7 @@ const MyTasks = () => {
 	}, [getAllTasks]);
 
 	return (
-		<DashboardLayout activeMenu='My Tasks'>
+		<DashboardLayout activeMenu='Minhas Tarefas'>
 			<div className='my-5'>
 				{/* Cabeçalho e filtro */}
 				<div className='flex flex-col lg:flex-row lg:items-center justify-between'>

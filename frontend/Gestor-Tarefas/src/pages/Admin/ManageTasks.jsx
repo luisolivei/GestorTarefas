@@ -73,11 +73,11 @@ const ManageTasks = () => {
 	}, [filterStatus]);
 
 	return (
-		<DashboardLayout activeMenu='Manage Tasks'>
+		<DashboardLayout activeMenu='Gerir Tarefas'>
 			<div className='my-5'>
 				<div className='flex flex-col lg:flex-row lg:items-center justify-between'>
 					<div className='flex items-center justify-between gap-3'>
-						<h2 className='text-xl md:text-xl font-medium'>Minhas Tarefas</h2>
+						<h2 className='text-xl md:text-xl font-medium'>Tarefas</h2>
 
 						{/* Botão de download do relatório visível em dispositivos móveis */}
 						<button className='flex lg:hidden download-btn' onClick={handleDownloadReport}>

@@ -72,7 +72,7 @@ const Dashboard = () => {
 	}, []);
 
 	return (
-		<DashboardLayout activeMenu='Dashboard'>
+		<DashboardLayout activeMenu='Painel'>
 			<div className='card my-5'>
 				<div>
 					<div className='col-span-3'>

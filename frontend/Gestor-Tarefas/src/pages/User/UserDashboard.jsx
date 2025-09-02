@@ -73,7 +73,7 @@ const UserDashboard = () => {
 	}, []);
 
 	return (
-		<DashboardLayout activeMenu='Dashboard'>
+		<DashboardLayout activeMenu='Painel'>
 			{/* Boas-vindas e data atual */}
 			<div className='card my-5'>
 				<div>
@@ -120,7 +120,7 @@ const UserDashboard = () => {
 						<div className='flex items-center justify-between'>
 							<h5 className='text-lg'>Tarefas Recentes</h5>
 							<button className='card-btn' onClick={onSeeMore}>
-								See All <LuArrowRight className='text-base' />
+								Ver Mais <LuArrowRight className='text-base' />
 							</button>
 						</div>
 						<TaskListTable tableData={dashboardData?.recentTasks || []} />

@@ -88,7 +88,7 @@ const ViewTaskDetails = () => {
 	}, [id, getTaskDetailsByID]);
 
 	return (
-		<DashboardLayout activeMenu={'My Tasks'}>
+		<DashboardLayout activeMenu={'Minhas Tarefas'}>
 			<div className='mt-5'>
 				{task && (
 					<div className='grid grid-cols-1 md:grid-cols-4 mt-4'>

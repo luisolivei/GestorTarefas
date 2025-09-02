@@ -189,12 +189,12 @@ const CreateTask = () => {
 	}, [taskId, getTaskDetailsByID]);
 
 	return (
-		<DashboardLayout activeMenu='Create Tasks'>
+		<DashboardLayout activeMenu='Criar Tarefa'>
 			<div className='mt-5'>
 				<div className='grid grid-cols-1 md:grid-cols-4 mt-4'>
 					<div className='form-card col-span-3'>
 						<div className='flex items-center justify-between'>
-							<h2 className='text-xl md:text-xl font-medium'>{taskId ? 'Atualizar Task' : 'Criar Task'}</h2>
+							<h2 className='text-xl md:text-xl font-medium'>{taskId ? 'Atualizar Task' : 'Criar Tarefa'}</h2>
 							{taskId && (
 								<button
 									className='flex items-center gap-1.5 text-[13px] font-medium text-rose-500 bg-rose-50 rounded px-2 py-1 border border-rose-100 hover:bg-rose-300 cursor-pointer:'
@@ -207,12 +207,12 @@ const CreateTask = () => {
 
 						<div className='mt-4'>
 							<label className='text-sx font-medium text-slate-600'>Título</label>
-							<input placeholder='Criar App UI' className='form-input' value={taskData.title} onChange={({ target }) => handleValueChange('title', target.value)} />
+							<input placeholder='Inserir Título' className='form-input' value={taskData.title} onChange={({ target }) => handleValueChange('title', target.value)} />
 						</div>
 
 						<div className='mt-3'>
 							<label className='text-xs font-medium text-slate-600'>Descrição</label>
-							<textarea placeholder='Descreve a Task' className='form-input' rows={4} value={taskData.description} onChange={({ target }) => handleValueChange('description', target.value)} />
+							<textarea placeholder='Descreve a Tarefa' className='form-input' rows={4} value={taskData.description} onChange={({ target }) => handleValueChange('description', target.value)} />
 						</div>
 
 						<div className='grid grid-cols-12 gap-4 mt-2'>
@@ -250,7 +250,7 @@ const CreateTask = () => {
 
 						<div className='flex justify-end mt-7'>
 							<button className='add-btn' onClick={handleSubmit} disabled={loading}>
-								{taskId ? 'ATUALIZAR' : 'CRIAR TASK'}
+								{taskId ? 'ATUALIZAR' : 'CRIAR TAREFA'}
 							</button>
 						</div>
 					</div>
@@ -258,7 +258,7 @@ const CreateTask = () => {
 			</div>
 
 			{/* Modal para confirmar eliminação da task */}
-			<Modal isOpen={openDeleteAlert} onClose={() => setOpenDeleteAlert(false)} title='Eliminar Task'>
+			<Modal isOpen={openDeleteAlert} onClose={() => setOpenDeleteAlert(false)} title='Eliminar Tarefa'>
 				<DeleteAlert content='Tem a certeza que pretende eliminar esta task?' onDelete={() => deleteTask()} />
 			</Modal>
 		</DashboardLayout>
