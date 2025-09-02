@@ -57,7 +57,7 @@ const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
 			{/* Botão para abrir o modal caso não haja utilizadores selecionados */}
 			{selectedUserAvatars.length === 0 && (
 				<button className='card-btn' onClick={() => setIsModalOpen(true)}>
-					<LuUsers className='text-sm' /> Add Members
+					<LuUsers className='text-sm' /> Adicionar Membros
 				</button>
 			)}
 

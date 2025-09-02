@@ -65,31 +65,31 @@ export const SIDE_MENU_USER_DATA = [
 // Dados de prioridade das tarefas
 export const PRIORITY_DATA = [
 	{
-		label: 'Low', // Baixa prioridade
-		value: 'Low',
+		label: 'Baixa', // Baixa prioridade
+		value: 'Baixa',
 	},
 	{
-		label: 'Medium', // Prioridade média
-		value: 'Medium',
+		label: 'Media', // Prioridade média
+		value: 'Media',
 	},
 	{
-		label: 'High', // Alta prioridade
-		value: 'High',
+		label: 'Alta', // Alta prioridade
+		value: 'Alta',
 	},
 ];
 
 // Dados de status das tarefas
 export const STATUS_DATA = [
 	{
-		label: 'Pending', // Pendente
-		value: 'Pending',
+		label: 'Pendente', // Pendente
+		value: 'Pendente',
 	},
 	{
-		label: 'In Progress', // Em progresso
-		value: 'In Progress',
+		label: 'Em Progresso', // Em progresso
+		value: 'Em Progresso',
 	},
 	{
-		label: 'Completed', // Concluída
-		value: 'Completed',
+		label: 'Concluída', // Concluída
+		value: 'Concluída',
 	},
 ];

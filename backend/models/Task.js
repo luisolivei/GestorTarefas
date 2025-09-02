@@ -13,13 +13,13 @@ const taskSchema = new mongoose.Schema(
 		description: { type: String }, // Descrição detalhada da tarefa
 		priority: {
 			type: String,
-			enum: ['Low', 'Medium', 'High'], // Apenas valores permitidos
-			default: 'Medium', // Valor por defeito
+			enum: ['Baixa', 'Media', 'Alta'], // Apenas valores permitidos
+			default: 'Media', // Valor por defeito
 		},
 		status: {
 			type: String,
-			enum: ['Pending', 'In Progress', 'Completed'],
-			default: 'Pending', // Estado inicial da tarefa
+			enum: ['Pendente', 'Em Progresso', 'Concluída'],
+			default: 'Pendente', // Estado inicial da tarefa
 		},
 		dueDate: {
 			type: Date,

@@ -9,11 +9,11 @@ const TaskListTable = ({ tableData }) => {
 	// Função para definir a cor do badge conforme o estado da tarefa
 	const getStatusBadgeColor = status => {
 		switch (status) {
-			case 'Completed':
+			case 'Concluída':
 				return 'bg-green-100 text-green-500 border border-green-200';
-			case 'Pending':
+			case 'Pendente':
 				return 'bg-purple-100 text-purple-500 border border-purple-200';
-			case 'In Progress':
+			case 'Em Progresso':
 				return 'bg-cyan-100 text-cyan-500 border border-cyan-200';
 			default:
 				return 'bg-gray-100 text-gray-500 border border-gray-200';
@@ -22,11 +22,11 @@ const TaskListTable = ({ tableData }) => {
 	// Função para definir a cor do badge conforme a prioridade da tarefa
 	const getPriorityBadgeColor = priority => {
 		switch (priority) {
-			case 'High':
+			case 'Alta':
 				return 'bg-red-100 text-red-500 border border-red-200';
-			case 'Medium':
+			case 'Media':
 				return 'bg-orange-100 text-orange-500 border border-orange-200';
-			case 'Low':
+			case 'Baixa':
 				return 'bg-green-100 text-green-500 border border-green-200';
 			default:
 				return 'bg-gray-100 text-gray-500 border border-gray-200';

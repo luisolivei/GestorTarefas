@@ -22,9 +22,9 @@ const UserCard = ({ userInfo }) => {
 			</div>
 			{/* Secção : estatísticas das tarefas */}
 			<div className='flex items-end gap-3 mt-5'>
-				<StatCard label='Pending' count={userInfo?.pendingTasks || 0} status='Pending' />
-				<StatCard label='In Progress' count={userInfo?.inProgressTasks || 0} status='In progress' />
-				<StatCard label='Completed' count={userInfo?.completedTasks || 0} status='Completed' />
+				<StatCard label='Pendente' count={userInfo?.pendingTasks || 0} status='Pendente' />
+				<StatCard label='Em Progresso' count={userInfo?.inProgressTasks || 0} status='Em Progresso' />
+				<StatCard label='Concluída' count={userInfo?.completedTasks || 0} status='Concluída' />
 			</div>
 		</div>
 	);
@@ -38,10 +38,10 @@ const StatCard = ({ label, count, status }) => {
     // Função: define a cor do "tag" de acordo com o estado da tarefa
 	const getStatusTagColor = () => {
 		switch (status) {
-			case 'In progress':
+			case 'Em Progresso':
 				return 'text-cyan-500 bg-gray-50';
 
-			case 'Completed':
+			case 'Concluída':
 				return 'text-indigo-500 bg-gray-50';
 
 			default:

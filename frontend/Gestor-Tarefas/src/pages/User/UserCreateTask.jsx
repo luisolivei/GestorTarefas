@@ -22,7 +22,7 @@ const UserCreateTask = () => {
 	const [taskData, setTaskData] = useState({
 		title: '', // título da tarefa
 		description: '', // descrição da tarefa
-		priority: 'Low', // prioridade
+		priority: 'Baixa', // prioridade
 		dueDate: '', // prazo de entrega
 		todoChecklist: [], // checklist de sub-tarefas
 		attachments: [], // anexos
@@ -46,7 +46,7 @@ const UserCreateTask = () => {
 		setTaskData({
 			title: '',
 			description: '',
-			priority: 'Low',
+			priority: 'Baixa',
 			dueDate: '',
 			todoChecklist: [],
 			attachments: [],
@@ -154,7 +154,7 @@ const UserCreateTask = () => {
 				setTaskData({
 					title: taskInfo.title || '',
 					description: taskInfo.description || '',
-					priority: taskInfo.priority || 'Low',
+					priority: taskInfo.priority || 'Baixa',
 					dueDate: taskInfo.dueDate ? moment(taskInfo.dueDate).format('YYYY-MM-DD') : '',
 					todoChecklist: taskInfo?.todoChecklist?.map(item => item?.task) || [],
 					attachments: taskInfo?.attachments || [],
@@ -193,7 +193,7 @@ const UserCreateTask = () => {
 					{/* Formulário da tarefa */}
 					<div className='form-card col-span-3'>
 						<div className='flex items-center justify-between'>
-							<h2 className='text-xl md:text-xl font-medium'>{taskId ? 'Update Tarefa' : 'Criar Tarefa'}</h2>
+							<h2 className='text-xl md:text-xl font-medium'>{taskId ? 'Atualizar Tarefa' : 'Criar Tarefa'}</h2>
 
 							{/* Botão para apagar tarefa (apenas se estivermos em edição) */}
 							{taskId && (
@@ -249,7 +249,7 @@ const UserCreateTask = () => {
 						{/* Botão de submissão */}
 						<div className='flex justify-end mt-7'>
 							<button className='add-btn' onClick={handleSubmit} disabled={loading}>
-								{taskId ? 'UPDATE' : 'Criar Tarefa'}
+								{taskId ? 'Atualizar' : 'Criar Tarefa'}
 							</button>
 						</div>
 					</div>

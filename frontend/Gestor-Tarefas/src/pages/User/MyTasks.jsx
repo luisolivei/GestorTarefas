@@ -13,7 +13,7 @@ const MyTasks = () => {
 	// Estado para armazenar as abas de filtragem por status
 	const [tabs, setTabs] = useState([]);
 	// Estado para armazenar o status atualmente selecionado
-	const [filterStatus, setFilterStatus] = useState('All');
+	const [filterStatus, setFilterStatus] = useState('Total');
 
 	const navigate = useNavigate(); // Hook para navegação entre rotas
 
@@ -22,7 +22,7 @@ const MyTasks = () => {
 		try {
 			// Requisição GET para obter tarefas filtradas por status
 			const response = await axiosInstance.get(API_PATHS.TASKS.GET_ALL_TASKS, {
-				params: { status: filterStatus === 'All' ? '' : filterStatus },
+				params: { status: filterStatus === 'Total' ? '' : filterStatus },
 			});
 
 			// Atualiza o estado com as tarefas recebidas
@@ -33,10 +33,10 @@ const MyTasks = () => {
 
 			// Cria array de abas com label e quantidade
 			const statusArray = [
-				{ label: 'All', count: statusSummary.all || 0 },
-				{ label: 'Pending', count: statusSummary.pendingTasks || 0 },
-				{ label: 'In Progress', count: statusSummary.inProgressTasks || 0 },
-				{ label: 'Completed', count: statusSummary.completedTasks || 0 },
+				{ label: 'Total', count: statusSummary.all || 0 },
+				{ label: 'Pendentes', count: statusSummary.pendingTasks || 0 },
+				{ label: 'Em Progresso', count: statusSummary.inProgressTasks || 0 },
+				{ label: 'Concluídas', count: statusSummary.completedTasks || 0 },
 			];
 			setTabs(statusArray); // Atualiza o estado das tabs
 		} catch (error) {

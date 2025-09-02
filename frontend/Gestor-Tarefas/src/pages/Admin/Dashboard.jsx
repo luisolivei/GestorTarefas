@@ -32,18 +32,18 @@ const Dashboard = () => {
 
 		// Dados para o gráfico circular (estado das tarefas)
 		const taskDistributionData = [
-			{ status: 'Pending', count: taskDistribution?.Pending || 0 },
-			{ status: 'In Progress', count: taskDistribution?.InProgress || 0 },
-			{ status: 'Completed', count: taskDistribution?.Completed || 0 },
+			{ status: 'Pendente', count: taskDistribution?.Pendente || 0 },
+			{ status: 'Em Progresso', count: taskDistribution?.EmProgresso || 0 },
+			{ status: 'Concluída', count: taskDistribution?.Concluída || 0 },
 		];
 
 		setPieChartData(taskDistributionData);
 
 		// Dados para o gráfico de barras (prioridade das tarefas)
 		const PriorityLevelData = [
-			{ priority: 'Low', count: taskPriorityLevels?.Low || 0 },
-			{ priority: 'Medium', count: taskPriorityLevels?.Medium || 0 },
-			{ priority: 'High', count: taskPriorityLevels?.High || 0 },
+			{ priority: 'Baixa', count: taskPriorityLevels?.Baixa || 0 },
+			{ priority: 'Media', count: taskPriorityLevels?.Media || 0 },
+			{ priority: 'Alta', count: taskPriorityLevels?.Alta || 0 },
 		];
 
 		setBarChartData(PriorityLevelData);
@@ -82,10 +82,10 @@ const Dashboard = () => {
 				</div>
 				<div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mt-5'>
 					{/* Cartões informativos */}
-					<InfoCard label='Total Tasks' value={addThousandsSeparator(dashboardData?.charts?.taskDistribution?.All || 0)} color='bg-primary' />
-					<InfoCard label='Pending Tasks' value={addThousandsSeparator(dashboardData?.charts?.taskDistribution?.Pending || 0)} color='bg-violet-500' />
-					<InfoCard label='In Progress' value={addThousandsSeparator(dashboardData?.charts?.taskDistribution?.InProgress || 0)} color='bg-cyan-500' />
-					<InfoCard label='Completed Tasks' value={addThousandsSeparator(dashboardData?.charts?.taskDistribution?.Completed || 0)} color='bg-lime-500' />
+					<InfoCard label='Tarefas' value={addThousandsSeparator(dashboardData?.charts?.taskDistribution?.Total || 0)} color='bg-primary' />
+					<InfoCard label='Pendentes' value={addThousandsSeparator(dashboardData?.charts?.taskDistribution?.Pendente || 0)} color='bg-violet-500' />
+					<InfoCard label='Em Progresso' value={addThousandsSeparator(dashboardData?.charts?.taskDistribution?.EmProgresso || 0)} color='bg-cyan-500' />
+					<InfoCard label='Concluídas' value={addThousandsSeparator(dashboardData?.charts?.taskDistribution?.Concluída || 0)} color='bg-lime-500' />
 				</div>
 			</div>
 

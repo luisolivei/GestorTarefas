@@ -24,7 +24,7 @@ const CreateTask = () => {
 	const [taskData, setTaskData] = useState({
 		title: '', // título da task
 		description: '', // descrição da task
-		priority: 'Low', // prioridade inicial
+		priority: 'Baixa', // prioridade inicial
 		dueDate: '', // data de entrega
 		assignedTo: [], // utilizadores atribuídos
 		todoChecklist: [], // checklist de subtarefas
@@ -49,7 +49,7 @@ const CreateTask = () => {
 		setTaskData({
 			title: '',
 			description: '',
-			priority: 'Low',
+			priority: 'Baixa',
 			dueDate: null,
 			assignedTo: [],
 			todoChecklist: [],
@@ -175,10 +175,10 @@ const CreateTask = () => {
 		try {
 			await axiosInstance.delete(API_PATHS.TASKS.DELETE_TASK(taskId));
 			setOpenDeleteAlert(false); // fecha modal de confirmação
-			toast.success('Task eliminada com sucesso!');
+			toast.success('Tarefa eliminada com sucesso!');
 			navigate('/admin/tasks'); // redireciona para lista de tasks
 		} catch (error) {
-			console.error('Erro ao eliminar task:', error.response?.data?.message || error.message);
+			console.error('Erro ao eliminar tarefa:', error.response?.data?.message || error.message);
 		}
 	}, [taskId, navigate]);
 
@@ -259,7 +259,7 @@ const CreateTask = () => {
 
 			{/* Modal para confirmar eliminação da task */}
 			<Modal isOpen={openDeleteAlert} onClose={() => setOpenDeleteAlert(false)} title='Eliminar Tarefa'>
-				<DeleteAlert content='Tem a certeza que pretende eliminar esta task?' onDelete={() => deleteTask()} />
+				<DeleteAlert content='Tem a certeza que pretende eliminar esta tarefa?' onDelete={() => deleteTask()} />
 			</Modal>
 		</DashboardLayout>
 	);

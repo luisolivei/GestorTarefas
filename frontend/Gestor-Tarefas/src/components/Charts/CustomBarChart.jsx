@@ -7,11 +7,11 @@ const CustomBarChart = ({ data }) => {
 	// Função auxiliar: devolve cor da barra consoante a prioridade
 	const getBarColor = entry => {
 		switch (entry?.priority) {
-			case 'Low':
+			case 'Baixa':
 				return '#00BC7D';
-			case 'Medium':
+			case 'Media':
 				return '#FE9900';
-			case 'High':
+			case 'Alta':
 				return '#FF1F57';
 			default:
 				return '#00BC7D';
@@ -27,7 +27,7 @@ const CustomBarChart = ({ data }) => {
                     <p className='text-xs font-semibold text-purple-800 mb-1'>{payload[0].payload.priority}</p>
                     {/* Mostra a contagem */}
 					<p className='text-sm text-gray-600'>
-						Count: <span className='text-sm font-medium text-gray-900'>{payload[0].payload.count}</span>
+						Total: <span className='text-sm font-medium text-gray-900'>{payload[0].payload.count}</span>
 					</p>
 				</div>
 			);

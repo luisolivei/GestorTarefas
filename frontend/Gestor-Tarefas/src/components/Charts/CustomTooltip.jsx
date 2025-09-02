@@ -11,7 +11,7 @@ const CustomTooltip = ({ active, payload}) => {
 				<p className='text-xs font-semibold text-purple-800 mb-1'>{payload[0].payload.name}</p>
 				{/* Valor associado (número de ocorrências, percentagem, etc.) */}
 				<p className='text-sm text-gray-600'>
-					Count: <span className='text-sm font-medium text-gray-900'>{payload[0].value}</span>
+					Total: <span className='text-sm font-medium text-gray-900'>{payload[0].value}</span>
 				</p>
 			</div>
 		);

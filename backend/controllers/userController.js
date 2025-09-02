@@ -12,9 +12,9 @@ const getUsers = async (req, res) => {
 		// Adicionar contagem de tarefas a cada utilizador
 		const usersWithTaskCount = await Promise.all(
 			users.map(async user => {
-				const pendingTasks = await Task.countDocuments({ assignedTo: user._id, status: 'pending' });
-				const inProgressTasks = await Task.countDocuments({ assignedTo: user._id, status: 'in-progress' });
-				const completedTasks = await Task.countDocuments({ assignedTo: user._id, status: 'completed' });
+				const pendingTasks = await Task.countDocuments({ assignedTo: user._id, status: 'Pendente' });
+				const inProgressTasks = await Task.countDocuments({ assignedTo: user._id, status: 'Em Progresso' });
+				const completedTasks = await Task.countDocuments({ assignedTo: user._id, status: 'Concluída' });
 
 				// Retornar objeto do utilizador com contagem de tarefas incluída
 				return {

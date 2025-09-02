@@ -6,9 +6,9 @@ const Progress = ({ progress, status }) => {
 	// Função para determinar a cor da barra conforme o status
 	const getColor = () => {
 		switch (status) {
-			case 'In Progress':
+			case 'Em Progresso':
 				return 'text-cyan-500 bg-cyan-500 border border-cyan-500/10'; // Em progresso
-			case 'Completed':
+			case 'Concluída':
 				return 'text-indigo-500 bg-indigo-500 border border-indigo-500/10'; // Concluído
 			default:
 				return 'text-violet-500 bg-violet-500 border border-violet-500/10'; // Outro estado

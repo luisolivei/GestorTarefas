@@ -12,7 +12,7 @@ const ManageTasks = () => {
 	const [allTasks, setAllTasks] = useState([]);
 
 	const [tabs, setTabs] = useState([]);
-	const [filterStatus, setFilterStatus] = useState('All');
+	const [filterStatus, setFilterStatus] = useState('Total');
 
 	const navigate = useNavigate();
 
@@ -20,7 +20,7 @@ const ManageTasks = () => {
 	const getAllTasks = async () => {
 		try {
 			const response = await axiosInstance.get(API_PATHS.TASKS.GET_ALL_TASKS, {
-				params: { status: filterStatus === 'All' ? '' : filterStatus },
+				params: { status: filterStatus === 'Total' ? '' : filterStatus },
 			});
 
 			setAllTasks(response.data?.tasks?.length > 0 ? response.data.tasks : []);
@@ -29,10 +29,10 @@ const ManageTasks = () => {
 			const statusSummary = response.data?.statusSummary || {};
 
 			const statusArray = [
-				{ label: 'All', count: statusSummary.all || 0 },
-				{ label: 'Pending', count: statusSummary.pendingTasks || 0 },
-				{ label: 'In Progress', count: statusSummary.inProgressTasks || 0 },
-				{ label: 'Completed', count: statusSummary.completedTasks || 0 },
+				{ label: 'Total', count: statusSummary.all || 0 },
+				{ label: 'Pendente', count: statusSummary.pendingTasks || 0 },
+				{ label: 'Em Progresso', count: statusSummary.inProgressTasks || 0 },
+				{ label: 'Concluída', count: statusSummary.completedTasks || 0 },
 			];
 			setTabs(statusArray);
 		} catch (error) {

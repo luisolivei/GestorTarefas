@@ -15,9 +15,9 @@ const ViewTaskDetails = () => {
 	// Função para determinar a cor da etiqueta com base no status da tarefa
 	const getStatusTagColor = status => {
 		switch (status) {
-			case 'In Progress':
+			case 'Em Progresso':
 				return 'bg-cyan-50 text-cyan-500 border border-cyan-500/10';
-			case 'Completed':
+			case 'Concluída':
 				return 'bg-lime-50 text-lime-500 border border-lime-500/20';
 			default:
 				return 'bg-violet-50 text-violet-500 border border-violet-500/10';
@@ -46,11 +46,11 @@ const ViewTaskDetails = () => {
 		const completedCount = updatedTodos.filter(todo => todo.completed).length;
 
 		// Determina o novo status da tarefa
-		let newStatus = 'Pending';
+		let newStatus = 'Pendentes';
 		if (completedCount === updatedTodos.length) {
-			newStatus = 'Completed';
+			newStatus = 'Concluída';
 		} else if (completedCount > 0) {
-			newStatus = 'In Progress';
+			newStatus = 'Em Progresso';
 		}
 
 		// Atualiza o estado local
@@ -107,10 +107,10 @@ const ViewTaskDetails = () => {
 							{/* Prioridade, prazo e utilizadores atribuídos */}
 							<div className='grid grid-cols-12 gap-4 mt-4'>
 								<div className='col-span-6 md:col-span-4'>
-									<InfoBox label='Priority' value={task?.priority} />
+									<InfoBox label='Prioridade' value={task?.priority} />
 								</div>
 								<div className='col-span-6 md:col-span-4'>
-									<InfoBox label='Due Date' value={task?.dueDate ? moment(task?.dueDate).format('Do MMM YYYY') : 'N/A'} />
+									<InfoBox label='Data Limite' value={task?.dueDate ? moment(task?.dueDate).format('Do MMM YYYY') : 'N/A'} />
 								</div>
 								<div className='col-span-6 md:col-span-4'>
 									<label className='text-xs font-medium text-slate-500'>Atribuído a</label>

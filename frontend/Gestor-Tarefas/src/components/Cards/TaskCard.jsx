@@ -9,9 +9,9 @@ const TaskCard = ({ title, description, priority, status, createdAt, dueDate, as
 	// Função: define a cor do "tag" de acordo com o estado da tarefa
 	const getStatusTagColor = () => {
 		switch (status) {
-			case 'In Progress':
+			case 'Em Progresso':
 				return 'text-cyan-500 bg-cyan-50 border border-cyan-500/10';
-			case 'Completed':
+			case 'Concluída':
 				return 'text-lime-500 bg-lime-50 border border-lime-500/20';
 			default:
 				return 'text-violet-500 bg-violet-50 border border-violet-500/10';
@@ -21,9 +21,9 @@ const TaskCard = ({ title, description, priority, status, createdAt, dueDate, as
 	// Função : define a cor do "tag" de acordo com a prioridade da tarefa
 	const getPriorityTagColor = () => {
 		switch (priority) {
-			case 'Low':
+			case 'Baixa':
 				return 'text-emerald-500 bg-emerald-50 border border-emerald-500/10';
-			case 'Medium':
+			case 'Media':
 				return 'text-amber-500 bg-amber-50 border border-amber-500/10';
 			default:
 				return 'text-rose-500 bg-rose-50 border border-rose-500/10';
@@ -43,14 +43,14 @@ const TaskCard = ({ title, description, priority, status, createdAt, dueDate, as
 				<div className={`text-[11px] font-medium ${getPriorityTagColor()} px-4 py-0.5 rounded`}>{priority} Prioridade</div>
 			</div>
 			{/* Conteúdo principal da tarefa */}
-			<div className={`px-4 border-l-[3px] ${status === 'In Progress' ? 'border-cyan-500' : status === 'Completed' ? 'border-indigo-500' : 'border-violet-500'}`}>
+			<div className={`px-4 border-l-[3px] ${status === 'Em Progresso' ? 'border-cyan-500' : status === 'Concluída' ? 'border-indigo-500' : 'border-violet-500'}`}>
 				{/* Título */}
 				<p className='text-sm font-medium text-gray-800 mt-4 line-clamp-2'>{title}</p>
 				{/* Descrição */}
 				<p className='text-xs text-gray-500 mt-1.5 line-clamp-2 leading-[18px]'>{description}</p>
 				{/* Progresso do checklist */}
 				<p className='text-[13px] text-gray-700/80 font-medium mt-2 mb-2 leading-[18px]'>
-					Task Done:{' '}
+					Tarefa Concluída:{' '}
 					<span className='font-semibold text-gray-700'>
 						{completedTodoCount}/{totalTodos}
 					</span>
