@@ -3,9 +3,11 @@ import axiosInstance from '../../utils/axiosInstance';
 import { API_PATHS } from '../../utils/apiPaths';
 import { useParams } from 'react-router-dom';
 import DashboardLayout from '../../components/layouts/DashboardLayout';
-import moment from 'moment';
+import moment from 'moment/min/moment-with-locales';
 import AvatarGroup from '../../components/AvatarGroup';
 import { LuSquareArrowOutUpRight } from 'react-icons/lu';
+
+moment.locale('pt');
 
 // Componente principal para visualizar os detalhes de uma tarefa
 const ViewTaskDetails = () => {
@@ -110,7 +112,7 @@ const ViewTaskDetails = () => {
 									<InfoBox label='Prioridade' value={task?.priority} />
 								</div>
 								<div className='col-span-6 md:col-span-4'>
-									<InfoBox label='Data Limite' value={task?.dueDate ? moment(task?.dueDate).format('Do MMM YYYY') : 'N/A'} />
+									<InfoBox label='Data Limite' value={task?.dueDate ? moment(task?.dueDate).format('D [de] MMMM [de] YYYY') : 'N/A'} />
 								</div>
 								<div className='col-span-6 md:col-span-4'>
 									<label className='text-xs font-medium text-slate-500'>Atribuído a</label>
