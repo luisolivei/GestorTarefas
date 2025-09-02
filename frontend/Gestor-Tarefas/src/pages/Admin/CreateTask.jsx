@@ -5,7 +5,7 @@ import axiosInstance from '../../utils/axiosInstance';
 import { API_PATHS } from '../../utils/apiPaths';
 import { useLocation, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import moment from 'moment';
+import moment from 'moment/min/moment-with-locales';
 import { LuTrash2 } from 'react-icons/lu';
 import SelectDropdown from '../../components/Inputs/SelectDropdown';
 import SelectUsers from '../../components/Inputs/SelectUsers';
@@ -14,6 +14,9 @@ import AddAttachmentsInput from '../../components/Inputs/AddAttachmentsInput';
 import Modal from '../../components/Modal';
 import DeleteAlert from '../../components/DeleteAlert';
 import { useUserAuth } from '../../hooks/useUserAuth'; // Hook para obter o utilizador autenticado
+
+
+moment.locale('pt');       // define locale global para moment
 
 const CreateTask = () => {
 	const location = useLocation();

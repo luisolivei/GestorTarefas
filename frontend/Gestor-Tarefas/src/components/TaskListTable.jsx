@@ -1,5 +1,6 @@
-import moment from "moment";
+import moment from 'moment/min/moment-with-locales';
 
+moment.locale('pt');
 
 // Componente de tabela para listar tarefas
 // Props:
@@ -40,7 +41,7 @@ const TaskListTable = ({ tableData }) => {
 						<th className='py-3 px-4 text-gray-800 font-medium text-[13px]'>Nome</th>
 						<th className='py-3 px-4 text-gray-800 font-medium text-[13px]'>Estado</th>
 						<th className='py-3 px-4 text-gray-800 font-medium text-[13px]'>Prioridade</th>
-						<th className='py-3 px-4 text-gray-800 font-medium text-[13px] hidden md:table-cell'>Criado por</th>
+						<th className='py-3 px-4 text-gray-800 font-medium text-[13px] hidden md:table-cell'>Criado em</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -57,13 +58,13 @@ const TaskListTable = ({ tableData }) => {
 								<span className={`px-2 py-1 text-xs rounded inline-block ${getPriorityBadgeColor(task.priority)}`}>{task.priority}</span>
 							</td>
 							{/* Data de criação */}
-							<td className='py-4 px-4 text-gray-700 text-[13px] text-nowrap hidden md:table-cell'>{task.createdAt ? moment(task.createdAt).format('Do MMM YYYY') : 'N/A'}</td>
+							<td className='py-4 px-4 text-gray-700 text-[13px] text-nowrap hidden md:table-cell'>{task.createdAt ? moment(task.createdAt).format('D [de] MMMM [de] YYYY') : 'N/A'}</td>
 						</tr>
 					))}
 				</tbody>
 			</table>
 		</div>
 	);
-}
+};
 
-export default TaskListTable
+export default TaskListTable;

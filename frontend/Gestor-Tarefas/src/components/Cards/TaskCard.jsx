@@ -1,7 +1,10 @@
 import Progress from '../Progress';
 import AvatarGroup from '../AvatarGroup';
 import { LuPaperclip } from 'react-icons/lu';
-import moment from 'moment';
+import moment from 'moment/min/moment-with-locales';
+
+
+moment.locale('pt'); // define globalmente o idioma português
 
 // Componente TaskCard
 // Props: título, descrição, prioridade, estado, datas, responsáveis, anexos, progresso e evento de clique
@@ -64,12 +67,12 @@ const TaskCard = ({ title, description, priority, status, createdAt, dueDate, as
 				<div className='flex items-center justify-between my-1'>
 					<div>
 						<label className='text-xs text-gray-500'>Data de criação</label>
-						<p className='text-[13px] font-medium text-gray-900'>{moment(createdAt).format('Do MMM YYYY')}</p>
+						<p className='text-[13px] font-medium text-gray-900'>{createdAt && moment(createdAt).format('D [de] MMMM YYYY')}</p>
 					</div>
 
 					<div>
 						<label className='text-xs text-gray-500'>Prazo de entrega</label>
-						<p className='text-[13px] font-medium text-gray-900'>{moment(dueDate).format('Do MMM YYYY')}</p>
+						<p className='text-[13px] font-medium text-gray-900'>{dueDate && moment(dueDate).format('D [de] MMMM YYYY')}</p>
 					</div>
 				</div>
 				{/* Grupo de avatares + anexos */}

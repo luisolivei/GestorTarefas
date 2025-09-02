@@ -79,7 +79,7 @@ const UserDashboard = () => {
 				<div>
 					<div className='col-span-3'>
 						<h2 className='text-xl md:text-2xl'>Bem vindo! {user?.name}</h2>
-						<p className='text-xs md:text-[13px] text-gray-400 mt-1.5'>{moment().format('dddd Do MMM YYYY')}</p>
+						<p className='text-xs md:text-[13px] text-gray-400 mt-1.5'>{moment().locale('pt').format('D [de] MMMM [de] YYYY')}</p>
 					</div>
 				</div>
 
@@ -88,7 +88,7 @@ const UserDashboard = () => {
 					<InfoCard label='Total Tasks' value={addThousandsSeparator(dashboardData?.charts?.taskDistribution?.Total || 0)} color='bg-primary' />
 					<InfoCard label='Tarefas Pendentes' value={addThousandsSeparator(dashboardData?.charts?.taskDistribution?.Pendente || 0)} color='bg-violet-500' />
 					<InfoCard label='Em Progresso' value={addThousandsSeparator(dashboardData?.charts?.taskDistribution?.EmProgresso || 0)} color='bg-cyan-500' />
-					<InfoCard label='Tarefas Concluídas' value={addThousandsSeparator(dashboardData?.charts?.taskDistribution?.Concluída|| 0)} color='bg-lime-500' />
+					<InfoCard label='Tarefas Concluídas' value={addThousandsSeparator(dashboardData?.charts?.taskDistribution?.Concluída || 0)} color='bg-lime-500' />
 				</div>
 			</div>
 
