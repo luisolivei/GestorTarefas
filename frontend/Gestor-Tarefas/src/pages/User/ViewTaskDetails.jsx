@@ -9,10 +9,13 @@ import { LuSquareArrowOutUpRight } from 'react-icons/lu';
 
 moment.locale('pt');
 
-// Componente principal para visualizar os detalhes de uma tarefa
+// Componente principal para visualizar e editar os detalhes de uma tarefa
 const ViewTaskDetails = () => {
 	const { id } = useParams(); // Pega o ID da tarefa da rota
 	const [task, setTask] = useState(null); // Estado para guardar os detalhes da tarefa
+	const [editableTask, setEditableTask] = useState(null); // Estado para edição da tarefa
+	const [newAttachment, setNewAttachment] = useState(''); // Estado temporário para novo anexo
+	const [newTodo, setNewTodo] = useState(''); // Estado temporário para novo item do checklist
 
 	// Função para determinar a cor da etiqueta com base no status da tarefa
 	const getStatusTagColor = status => {
@@ -32,17 +35,17 @@ const ViewTaskDetails = () => {
 			const response = await axiosInstance.get(API_PATHS.TASKS.GET_TASK_BY_ID(id));
 			if (response.data) {
 				const taskInfo = response.data;
-				setTask(taskInfo); // Atualiza o estado com a tarefa obtida
+				setTask(taskInfo); // Atualiza a tarefa principal
+				setEditableTask(taskInfo); // Inicializa a versão editável
 			}
 		} catch (error) {
-			console.error('Error fetching task details:', error);
+			console.error('Erro ao buscar detalhes da tarefa:', error);
 		}
 	}, [id]);
 
-	// Função para alternar o estado de uma tarefa do checklist (concluída ou não)
-	const handleToggle = async todoId => {
-		// Atualiza o checklist localmente
-		const updatedTodos = task.todoChecklist.map(todo => (todo._id === todoId ? { ...todo, completed: !todo.completed } : todo));
+	// Alterna o estado de um item do checklist (concluído/não concluído)
+	const handleToggle = todoId => {
+		const updatedTodos = editableTask.todoChecklist.map(todo => (todo._id === todoId ? { ...todo, completed: !todo.completed } : todo));
 
 		// Conta quantos estão completos
 		const completedCount = updatedTodos.filter(todo => todo.completed).length;
@@ -56,24 +59,53 @@ const ViewTaskDetails = () => {
 		}
 
 		// Atualiza o estado local
-		setTask(prev => ({
+		setEditableTask(prev => ({
 			...prev,
 			todoChecklist: updatedTodos,
 			status: newStatus,
 		}));
+	};
 
-		// Atualiza o backend
+	// Adicionar novo item ao checklist
+	const handleAddTodo = () => {
+		if (!newTodo.trim()) return;
+		const newItem = { _id: Date.now().toString(), task: newTodo.trim(), completed: false };
+		setEditableTask(prev => ({
+			...prev,
+			todoChecklist: [...(prev.todoChecklist || []), newItem],
+		}));
+		setNewTodo('');
+	};
+
+	// Editar item existente do checklist
+	const handleEditTodo = (todoId, value) => {
+		setEditableTask(prev => ({
+			...prev,
+			todoChecklist: prev.todoChecklist.map(todo => (todo._id === todoId ? { ...todo, task: value } : todo)),
+		}));
+	};
+
+	// Remover item do checklist
+	const handleRemoveTodo = todoId => {
+		setEditableTask(prev => ({
+			...prev,
+			todoChecklist: prev.todoChecklist.filter(todo => todo._id !== todoId),
+		}));
+	};
+
+	// Salvar alterações feitas pelo utilizador
+	const handleSave = async () => {
 		try {
-			await axiosInstance.put(API_PATHS.TASKS.UPDATE_TASK(task._id), {
-				todoChecklist: updatedTodos,
-				status: newStatus,
-			});
+			await axiosInstance.put(API_PATHS.TASKS.UPDATE_TASK(task._id), editableTask);
+			setTask(editableTask); // Atualiza a tarefa principal
+			alert('Tarefa atualizada com sucesso!');
 		} catch (error) {
-			console.error('Error updating task:', error);
+			console.error('Erro ao atualizar tarefa:', error);
+			alert('Erro ao atualizar a tarefa.');
 		}
 	};
 
-	// Função para abrir links de anexos numa nova aba
+	// Abrir links de anexos numa nova aba
 	const handleLinkClick = link => {
 		if (!/^https?:\/\//i.test(link)) {
 			link = 'https://' + link; // Garantir que o link é completo
@@ -81,62 +113,140 @@ const ViewTaskDetails = () => {
 		window.open(link, '_blank');
 	};
 
-	// Buscar os detalhes da tarefa ao montar o componente
+	// Adicionar novo anexo
+	const handleAddAttachment = () => {
+		if (!newAttachment) return;
+		setEditableTask(prev => ({
+			...prev,
+			attachments: [...(prev.attachments || []), newAttachment],
+		}));
+		setNewAttachment('');
+	};
+
+	// Remover anexo existente
+	const handleRemoveAttachment = index => {
+		setEditableTask(prev => ({
+			...prev,
+			attachments: prev.attachments.filter((_, i) => i !== index),
+		}));
+	};
+
 	useEffect(() => {
-		if (id) {
-			getTaskDetailsByID();
-		}
-		return () => {};
+		if (id) getTaskDetailsByID();
 	}, [id, getTaskDetailsByID]);
 
 	return (
 		<DashboardLayout activeMenu={'Minhas Tarefas'}>
 			<div className='mt-5'>
-				{task && (
+				{editableTask && (
 					<div className='grid grid-cols-1 md:grid-cols-4 mt-4'>
 						<div className='form-card col-span-3'>
 							{/* Cabeçalho com título e status */}
-							<div className='flex items-center justify-between'>
-								<h2 className='text-sm md:text-xl font-medium'>{task?.title}</h2>
-								<div className={`text-[11px] md:text-[13px] font-medium ${getStatusTagColor(task?.status)} px-4 py-0.5 rounded`}>{task?.status}</div>
+							<div className='mt-4'>
+								<label className='text-xs font-medium text-slate-600'>Título</label>
+								<div className='flex items-center justify-between gap-4 mt-1'>
+									<input
+										type='text'
+										value={editableTask?.title || ''}
+										onChange={e => setEditableTask(prev => ({ ...prev, title: e.target.value }))}
+										className='px-2 py-1 text-sm md:text-base font-medium rounded w-full'
+									/>
+									<div className={`text-[11px] md:text-[13px] font-medium ${getStatusTagColor(editableTask?.status)} px-4 py-0.5 rounded`}>{editableTask?.status}</div>
+								</div>
 							</div>
 
 							{/* Descrição da tarefa */}
 							<div className='mt-4'>
-								<InfoBox label='Description' value={task?.description} />
+								<label className='text-xs font-medium text-slate-500'>Descrição</label>
+								<textarea
+									value={editableTask?.description || ''}
+									onChange={e => setEditableTask(prev => ({ ...prev, description: e.target.value }))}
+									className='px-2 py-1 rounded w-full text-sm md:text-base mt-1'
+								/>
 							</div>
 
-							{/* Prioridade, prazo e utilizadores atribuídos */}
+							{/* Prioridade, prazo e utilizadores */}
 							<div className='grid grid-cols-12 gap-4 mt-4'>
 								<div className='col-span-6 md:col-span-4'>
-									<InfoBox label='Prioridade' value={task?.priority} />
+									<label className='text-xs font-medium text-slate-500'>Prioridade</label>
+									<select
+										value={editableTask?.priority || 'Média'}
+										onChange={e => setEditableTask(prev => ({ ...prev, priority: e.target.value }))}
+										className='border px-2 py-1 rounded w-full text-sm md:text-base mt-1'
+									>
+										<option value='Baixa'>Baixa</option>
+										<option value='Média'>Média</option>
+										<option value='Alta'>Alta</option>
+									</select>
 								</div>
+
 								<div className='col-span-6 md:col-span-4'>
-									<InfoBox label='Data Limite' value={task?.dueDate ? moment(task?.dueDate).format('D [de] MMMM [de] YYYY') : 'N/A'} />
+									<label className='text-xs font-medium text-slate-500'>Data Limite</label>
+									<input
+										type='date'
+										value={editableTask?.dueDate ? moment(editableTask?.dueDate).format('YYYY-MM-DD') : ''}
+										onChange={e => setEditableTask(prev => ({ ...prev, dueDate: e.target.value }))}
+										className='border px-2 py-1 rounded w-full text-sm md:text-base mt-1'
+									/>
 								</div>
+
 								<div className='col-span-6 md:col-span-4'>
 									<label className='text-xs font-medium text-slate-500'>Atribuído a</label>
-									<AvatarGroup avatars={task?.assignedTo?.map(item => item?.profileImageUrl) || []} maxVisible={5} />
+									<AvatarGroup avatars={editableTask?.assignedTo?.map(item => item?.profileImageUrl) || []} maxVisible={5} />
 								</div>
 							</div>
 
 							{/* Checklist de tarefas */}
-							<div className='mt-2'>
+							<div className='mt-4'>
 								<label className='text-xs font-medium text-slate-500'>Checklist de Tarefas</label>
-								{task?.todoChecklist?.map(todo => (
-									<TodoChecklist key={todo._id} task={todo.task} isChecked={todo.completed} onChange={() => handleToggle(todo._id)} />
+								{editableTask?.todoChecklist?.map(todo => (
+									<div key={todo._id} className='flex items-center gap-3 p-2'>
+										<input type='checkbox' checked={todo.completed} onChange={() => handleToggle(todo._id)} className='w-4 h-4 text-primary bg-gray-100 rounded-sm outline-none cursor-pointer' />
+										<input
+											type='text'
+											value={todo.task}
+											onChange={e => handleEditTodo(todo._id, e.target.value)}
+											className={`px-2 py-1 rounded text-sm md:text-base flex-1 ${todo.completed ? 'line-through text-gray-400' : 'text-gray-700'}`}
+										/>
+										<button className='text-red-500 px-2 py-1 text-xs rounded' onClick={() => handleRemoveTodo(todo._id)}>
+											Remover
+										</button>
+									</div>
 								))}
+								{/* Adicionar novo item */}
+								<div className='flex mt-2 gap-2'>
+									<input type='text' value={newTodo} onChange={e => setNewTodo(e.target.value)} className='px-2 py-1 rounded text-sm flex-1' placeholder='Adicionar nova tarefa' />
+									<button onClick={handleAddTodo} className='bg-primary text-white px-2 py-1 rounded text-sm'>
+										Adicionar
+									</button>
+								</div>
 							</div>
 
 							{/* Anexos */}
-							{task?.attachments?.length >= 0 && (
-								<div className='mt-2'>
-									<label className='text-xs font-medium text-slate-500'>Anexos</label>
-									{task?.attachments?.map((link, index) => (
-										<Attachment key={`link_${index}`} link={link} index={index} onClick={() => handleLinkClick(link)} />
-									))}
+							<div className='mt-4'>
+								<label className='text-xs font-medium text-slate-500'>Anexos</label>
+								{editableTask?.attachments?.map((link, index) => (
+									<div key={`link_${index}`} className='flex items-center gap-2 mb-2'>
+										<p className='text-xs text-black flex-1 cursor-pointer' onClick={() => handleLinkClick(link)}>
+											{link}
+										</p>
+										<button className='text-red-500 text-xs px-2 py-1 border rounded' onClick={() => handleRemoveAttachment(index)}>
+											Remover
+										</button>
+									</div>
+								))}
+								<div className='flex mt-2 gap-2'>
+									<input type='text' value={newAttachment} onChange={e => setNewAttachment(e.target.value)} className='px-2 py-1 rounded text-sm flex-1' placeholder='Adicionar novo link' />
+									<button onClick={handleAddAttachment} className='bg-primary text-white px-2 py-1 rounded text-sm'>
+										Adicionar
+									</button>
 								</div>
-							)}
+							</div>
+
+							{/* Botão de salvar alterações */}
+							<button className='mt-4 px-4 py-2 bg-primary text-white rounded' onClick={handleSave}>
+								Salvar Alterações
+							</button>
 						</div>
 					</div>
 				)}
@@ -146,36 +256,3 @@ const ViewTaskDetails = () => {
 };
 
 export default ViewTaskDetails;
-
-// Componente reutilizável para mostrar label e valor
-const InfoBox = ({ label, value }) => {
-	return (
-		<>
-			<label className='text-xs font-medium text-slate-500'>{label}</label>
-			<p className='text-[12px] md:text-[13px] font-medium text-gray-700 mt-0.5'>{value}</p>
-		</>
-	);
-};
-
-// Componente para cada item do checklist de tarefas
-const TodoChecklist = ({ task, isChecked, onChange }) => {
-	return (
-		<div className='flex items-center gap-3 p-3'>
-			<input type='checkbox' checked={isChecked} onChange={onChange} className='w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded-sm outline-none cursor-pointer' />
-			<p className='text-[12px] md:text-[13px] font-medium text-gray-700'>{task}</p>
-		</div>
-	);
-};
-
-// Componente para anexos com link clicável
-const Attachment = ({ link, index, onClick }) => {
-	return (
-		<div className='flex justify-between bg-gray-50 border border-gray-100 px-3 py-2 rounded-md mb-3 mt-2 cursor-pointer' onClick={onClick}>
-			<div className='flex-1 flex items-center gap-3'>
-				<span className='text-xs text-gray-400 font-semibold mr-2'>{index < 9 ? `0${index + 1}` : index + 1}</span>
-				<p className='text-xs text-black'>{link}</p>
-			</div>
-			<LuSquareArrowOutUpRight className='text-gray-400' />
-		</div>
-	);
-};
