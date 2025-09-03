@@ -197,7 +197,7 @@ const CreateTask = () => {
 				<div className='grid grid-cols-1 md:grid-cols-4 mt-4'>
 					<div className='form-card col-span-3'>
 						<div className='flex items-center justify-between'>
-							<h2 className='text-xl md:text-xl font-medium'>{taskId ? 'Atualizar Task' : 'Criar Tarefa'}</h2>
+							<h2 className='text-xl md:text-xl font-medium'>{taskId ? 'Atualizar Tarefa' : 'Criar Tarefa'}</h2>
 							{taskId && (
 								<button
 									className='flex items-center gap-1.5 text-[13px] font-medium text-rose-500 bg-rose-50 rounded px-2 py-1 border border-rose-100 hover:bg-rose-300 cursor-pointer:'
