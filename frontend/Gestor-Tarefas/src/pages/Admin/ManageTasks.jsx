@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import DashboardLayout from '../../components/layouts/DashboardLayout';
 import { useNavigate } from 'react-router-dom';
 import { API_PATHS } from '../../utils/apiPaths';
@@ -17,7 +17,7 @@ const ManageTasks = () => {
 	const navigate = useNavigate();
 
 	// Buscar todas as tarefas filtradas por estado
-	const getAllTasks = async () => {
+	const getAllTasks = useCallback(async () => {
 		try {
 			const response = await axiosInstance.get(API_PATHS.TASKS.GET_ALL_TASKS, {
 				params: { status: filterStatus === 'Total' ? '' : filterStatus },
@@ -38,7 +38,7 @@ const ManageTasks = () => {
 		} catch (error) {
 			console.error('Erro ao buscar tarefas:', error);
 		}
-	};
+	}, [filterStatus]);
 
 	// Abrir a página de edição da tarefa
 	const handleClick = taskData => {
@@ -69,8 +69,8 @@ const ManageTasks = () => {
 
 	useEffect(() => {
 		getAllTasks();
-		return () => {};
-	}, [filterStatus]);
+		
+	}, [getAllTasks]);
 
 	return (
 		<DashboardLayout activeMenu='Gerir Tarefas'>

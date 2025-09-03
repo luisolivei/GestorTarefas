@@ -1,6 +1,6 @@
 import DashboardLayout from '../../components/layouts/DashboardLayout';
 import { useUserAuth } from '../../hooks/useUserAuth'; // Hook para garantir autenticação do utilizador
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../context/UserContext'; // Contexto do utilizador
 import axiosInstance from '../../utils/axiosInstance'; // Axios configurado
 import { useNavigate } from 'react-router-dom';
@@ -49,7 +49,7 @@ const UserDashboard = () => {
 	};
 
 	// Função para buscar os dados do dashboard do utilizador
-	const getDashboardData = async () => {
+	const getDashboardData = useCallback(async () => {
 		try {
 			const response = await axiosInstance.get(API_PATHS.TASKS.GET_USER_DASHBOARD_DATA);
 			if (response.data) {
@@ -59,7 +59,7 @@ const UserDashboard = () => {
 		} catch (error) {
 			console.error('Erro ao obter dados do dashboard:', error);
 		}
-	};
+	}, []);
 
 	// Navegar para a lista completa de tarefas
 	const onSeeMore = () => {
@@ -69,8 +69,8 @@ const UserDashboard = () => {
 	// useEffect para buscar os dados ao montar o componente
 	useEffect(() => {
 		getDashboardData();
-		return () => {};
-	}, []);
+		
+	}, [getDashboardData]);
 
 	return (
 		<DashboardLayout activeMenu='Painel'>
