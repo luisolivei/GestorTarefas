@@ -51,7 +51,7 @@ const ViewTaskDetails = () => {
 		const completedCount = updatedTodos.filter(todo => todo.completed).length;
 
 		// Determina o novo status da tarefa
-		let newStatus = 'Pendentes';
+		let newStatus = 'Pendente';
 		if (completedCount === updatedTodos.length) {
 			newStatus = 'Concluída';
 		} else if (completedCount > 0) {
@@ -149,9 +149,9 @@ const ViewTaskDetails = () => {
 										type='text'
 										value={editableTask?.title || ''}
 										onChange={e => setEditableTask(prev => ({ ...prev, title: e.target.value }))}
-										className='px-2 py-1 text-sm md:text-base font-medium rounded w-full'
+										className='px-2 py-1 text-sm md:text-base font-medium rounded '
 									/>
-									<div className={`text-[11px] md:text-[13px] font-medium ${getStatusTagColor(editableTask?.status)} px-4 py-0.5 rounded`}>{editableTask?.status}</div>
+									<div className={`text-[11px] md:text-[13px] font-medium ${getStatusTagColor(editableTask?.status)} px-5 py-2 rounded`}>{editableTask?.status}</div>
 								</div>
 							</div>
 
