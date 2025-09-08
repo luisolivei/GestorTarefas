@@ -12,7 +12,7 @@ import Login from './pages/Auth/Login';
 import SignUp from './pages/Auth/SignUp';
 import PrivateRoute from './routes/PrivateRoute';
 
-import UserProvider from './context/UserProvider'; // Provider do utilizador (estado global)
+import {UserProvider} from './context/UserProvider'; // Provider do utilizador (estado global)
 import { UserContext } from './context/UserContext'; // Contexto do utilizador
 import { Toaster } from 'react-hot-toast';
 
