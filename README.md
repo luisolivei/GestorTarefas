@@ -48,6 +48,8 @@ O Gestor de Tarefas é uma aplicação Fullstack desenvolvida com React (fronten
  
 - Middleware de upload seguro de avatar
 
+- Teste do Backend no Postman
+
 📂 Estrutura do Projeto
 -
 
@@ -81,7 +83,7 @@ GestorTarefas/
 └── README.md
 
 
-⚙️ Instalação e Execução🔧 Pré-requisitos
+⚙️ Instalação e Execução 🔧 Pré-requisitos
 -
 - Node.js (v18+)
 
@@ -119,6 +121,7 @@ DB_URI=
 JWT_SECRET=
 
 COOKIE_SECRET=
+
 
 
 🔒 Segurança:
