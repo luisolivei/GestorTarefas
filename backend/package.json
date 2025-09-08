@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"main": "server.js",
 	"scripts": {
-		"postinstall": "cd frontend/Gestor-Tarefas && npm install && npm run build && rm -rf backend/dist && mv dist backend/dist",
+		"postinstall": "cd ../frontend/Gestor-Tarefas && npm install && npm run build && rm -rf dist && mv dist ../backend/dist",
 		"start": "node server.js",
 		"dev": "nodemon server.js"
 	},
