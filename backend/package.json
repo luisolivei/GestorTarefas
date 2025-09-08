@@ -1,33 +1,33 @@
 {
-  "name": "gestor-tarefas",
-  "version": "1.0.0",
-  "main": "server.js",
-  "scripts": {
-    "postinstall": "cd frontend && npm install && npm run build && rm -rf backend/dist && mv dist backend/dist",
-    "start": "node backend/server.js",
-    "dev": "nodemon server.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "Backend do gestor de tarefas, serve a API e o frontend compilado",
-  "dependencies": {
-    "bcryptjs": "^3.0.2",
-    "cookie-parser": "^1.4.7",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.0",
-    "exceljs": "^4.4.0",
-    "express": "^5.1.0",
-    "express-mongo-sanitize": "^2.2.0",
-    "express-validator": "^7.2.1",
-    "helmet": "^8.1.0",
-    "isomorphic-dompurify": "^2.26.0",
-    "jsdom": "^26.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.16.4",
-    "multer": "^2.0.1"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.10"
-  }
+	"name": "gestor-tarefas",
+	"version": "1.0.0",
+	"main": "server.js",
+	"scripts": {
+		"postinstall": "cd frontend/Gestor-Tarefas && npm install && npm run build && rm -rf ../../backend/dist && mv dist ../../backend/dist",
+		"start": "node backend/server.js",
+		"dev": "nodemon server.js"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"description": "Backend do gestor de tarefas, serve a API e o frontend compilado",
+	"dependencies": {
+		"bcryptjs": "^3.0.2",
+		"cookie-parser": "^1.4.7",
+		"cors": "^2.8.5",
+		"dotenv": "^17.2.0",
+		"exceljs": "^4.4.0",
+		"express": "^5.1.0",
+		"express-mongo-sanitize": "^2.2.0",
+		"express-validator": "^7.2.1",
+		"helmet": "^8.1.0",
+		"isomorphic-dompurify": "^2.26.0",
+		"jsdom": "^26.1.0",
+		"jsonwebtoken": "^9.0.2",
+		"mongoose": "^8.16.4",
+		"multer": "^2.0.1"
+	},
+	"devDependencies": {
+		"nodemon": "^3.1.10"
+	}
 }
